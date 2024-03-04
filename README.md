@@ -7,8 +7,11 @@
 ## Client
 - Đặt lịch các dịch vụ của pet => nhận email xác thực dịch vụ đã đăng ký
 - Nhận thông báo mỗi khi có chương trình khuyến mãi
-- Mua sản phẩm
-- Thanh toán online
+- Mua sản phẩm =>Thanh toán online
+- Cập nhật profile
+- Theo dõi, xem lịch sử trạng thái đơn hàng
+- Xem lịch sử sử dụng dịch vụ
+- Đánh giá dịch vụ
 
 ## Admin
 - Quản lí dịch vụ, setting giá cho từng dịch vụ / petID/ cân nặng của pet
