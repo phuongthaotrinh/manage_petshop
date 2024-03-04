@@ -27,15 +27,18 @@ import {MediumZoom} from "@/components/common/zoom";
 import Image from "next/image";
 import {FileDialog} from "@/components/common/uploads/file-dialog";
 import {RenderImage} from "@/components/common/render-image";
+import {useCreateProduct} from "@/actions/queries/products";
+import {toast} from "react-hot-toast";
 
 export interface FormItems {
     generalInfo:{
-        name:string,
-        sub_title:string,
+        title:string,
+        subtitle:string,
         handle:string,
-        meterial:string,
+        material:string,
         description:string,
-        discount_able:boolean
+        discountable:boolean,
+        status: string
 
     },
     organize:{
@@ -50,14 +53,14 @@ export interface FormItems {
         } [],
     productVariants:
         {
-            name: string,
+            title: string,
             price: string,
             data:[],
-            meterial: string,
-            quantity_in_stock: number,
+            material: string,
+            inventory_quantity: number,
             sku:string,
-            EAN:string,
-            UPC:string,
+            ean:string,
+            upc:string,
             barcode:string
 
         }[],
@@ -68,12 +71,13 @@ export interface FormItems {
 }
 export const initialValues: FormItems = {
     generalInfo:{
-        name:"",
-        sub_title:"",
+        title:"",
+        subtitle:"",
         handle:"",
-        meterial:"",
+        material:"",
         description:"",
-        discount_able:true
+        discountable:true,
+        status: ""
     },
     organize:{
         brand_id: "",
@@ -97,17 +101,38 @@ export default function ProductNew () {
     const { isUploading, startUpload } = useUploadThing("productImage")
     const [thumbnail, setThumbnail] = React.useState<FileWithPreview[] | null>(null)
     const [galleries, setGalleries] = React.useState<FileWithPreview[] | null>(null)
-
+    const {mutateAsync} = useCreateProduct()
 
     const close = () => {
             router.back();
             setFormData(initialValues);
     }
 
-    const publish  = () => {
+    const publish  = async (status: "published" | "draft") => {
+        if(thumbnail) {
+            await startUpload(thumbnail).then((data) => {
+                console.log("thumbnail",data)
+            })
+        }
         formData.thumbnail = thumbnail;
-        formData.galleries = galleries
-        console.log("publish Fnc", formData)
+        formData.galleries = galleries;
+
+        formData.generalInfo.status = status;
+        formData.organize.category_ids = formData.organize.category_ids.map((i:any) => i.value)
+
+
+        startTransition(() => {
+            toast.promise((mutateAsync(formData)), {
+                loading: "Creating...",
+                success:(data) => {
+                    console.log("data",data);
+                    setFormData(initialValues);
+                    setOpen(false);
+                    return "Creat product success"
+                },
+                error: "Error"
+            })
+        })
 
     }
     const saveAsDraf  = () => {
@@ -130,8 +155,8 @@ export default function ProductNew () {
                                 <X className="w-6 h-6"/>
                             </Button>
                             <div className="space-x-2">
-                                <Button variant="ghost" type="button" disabled={!formData.generalInfo.name}  size="sm" onClick={() => saveAsDraf()}>Save as draft</Button>
-                                <Button variant="default" type="button" disabled={!formData.generalInfo.name} size="sm" onClick={() => publish()}>Publish product</Button>
+                                <Button variant="ghost" type="button" disabled={!formData.generalInfo.title}  size="sm" onClick={() => publish("draft")}>Save as draft</Button>
+                                <Button variant="default" type="button" disabled={!formData.generalInfo.title} size="sm" onClick={() => publish("published")}>Publish product</Button>
                             </div>
                         </div>
                         <div className="border my-2"></div>

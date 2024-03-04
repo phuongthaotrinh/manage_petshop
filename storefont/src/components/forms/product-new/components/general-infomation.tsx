@@ -29,7 +29,7 @@ export function GeneralInfomation ({updateForm,formData}:IGeneralInfomation)  {
                             name="name"
                             id="name"
                             placeholder="Winter Jacket"
-                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,name: e.target.value}})}
+                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,title: e.target.value}})}
                             className="w-full"
                             required
                         />
@@ -44,7 +44,7 @@ export function GeneralInfomation ({updateForm,formData}:IGeneralInfomation)  {
                             name="sub_title"
                             id="sub_title"
                             placeholder="Warm and cozy"
-                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,sub_title: e.target.value}})}
+                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,subtitle: e.target.value}})}
                             className="w-full"
                             required
                         />
@@ -76,7 +76,7 @@ export function GeneralInfomation ({updateForm,formData}:IGeneralInfomation)  {
                             name="meterial"
                             id="meterial"
                             placeholder="Warm and cozy"
-                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,meterial: e.target.value}})}
+                            onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,material: e.target.value}})}
                             className="w-full"
                             required
                         />
@@ -99,7 +99,7 @@ export function GeneralInfomation ({updateForm,formData}:IGeneralInfomation)  {
                         <span className="font-semibold">Discountable</span>
                         <Switch name="discount_able"
                                 onCheckedChange={(e) => {
-                                    updateForm({ generalInfo:{...formData.generalInfo,discount_able: e}})
+                                    updateForm({ generalInfo:{...formData.generalInfo,discountable: e}})
                                 }}
 
                         />

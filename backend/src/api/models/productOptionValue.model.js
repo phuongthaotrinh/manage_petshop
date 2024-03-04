@@ -1,23 +1,26 @@
-
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import {productStatus} from "../../constants/product"
+
 const productOptionValueSchema = new mongoose.Schema({
-    title: { tye: String  },
-   option_id: {
-       type: mongoose.Schema.Types.ObjectId,
-       ref: 'ProductOption',
-   },
-    variant_id: {
+    value: {tye: String},
+    product_option_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductOption',
+    },
+    product_variant_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductVariant',
+    },
+    metadata:{
+        type: JSON
     }
 
 }, {
     collection: 'product_option_value',
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
+    toJSON: {virtuals: true},
     autoIndex: true
 })
 

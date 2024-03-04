@@ -37,9 +37,9 @@ export function TableAddProductVariant ({data,setPdAttrOpen, setDataCreateEdit}:
                         <TableBody>
                             {data?.map((i, j) => (
                                 <TableRow key={j}>
-                                    <TableCell className="font-medium">{i?.name || ""}</TableCell>
+                                    <TableCell className="font-medium">{i?.title || ""}</TableCell>
                                     <TableCell className="font-medium">{i?.price || ""}</TableCell>
-                                    <TableCell className="font-medium">{i?.quantity_in_stock}</TableCell>
+                                    <TableCell className="font-medium">{i?.inventory_quantity}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>

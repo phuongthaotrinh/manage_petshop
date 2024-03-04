@@ -10,6 +10,9 @@ const productOptionSchema = new mongoose.Schema({
     title:{
         type: String,
         trim:true
+    },
+    metadata:{
+        type: JSON
     }
 }, {
     collection: 'product_option',

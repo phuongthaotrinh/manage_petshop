@@ -52,11 +52,6 @@ export enum QUERY_KEYS {
     SERVICES_COMBO__GET_ALL="comboService/getAllComboService",
 
 
-    //PRODUCT_ATTRIBUTE
-    PRODUCT_ATTRIBUTE__GET_ALL="pr-attributes/getAll",
-    PRODUCT_ATTRIBUTE__CREATE="pr-attributes/create",
-    PRODUCT_ATTRIBUTE__GET_ONE ="pr-attributes/getOne",
-    PRODUCT_ATTRIBUTE__UPDATE="pr-attributes/update",
 
 
     //PRODUCT

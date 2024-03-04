@@ -23,12 +23,12 @@ import {setValuesOfForm} from "@/lib/helpers";
 function convertDataVariables(input:any) {
     const dataVariables = {};
     const data = [];
-
+    let index = 0;
     for (const key in input) {
         if (key.startsWith('data-')) {
             const variant_name = key.substring(5);
             const variant_data = input[key];
-            data.push({ variant_name, variant_data });
+            data.push({ variant_name, variant_data});
         } else {
             // @ts-ignore
             dataVariables[key] = input[key];
@@ -52,6 +52,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
 
     const hanldePrdVariantSubmit = (values:any) => {
         const outputData = convertDataVariables(values);
+        console.log("outputData", outputData)
         setPdAttrOpen(false);
         //@ts-ignore
         updateForm({ productVariants:[...formData.productVariants, outputData]})
@@ -114,7 +115,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                             <div id="product_attributes" className="grid grid-cols-2 gap-3">
                                                                 <FormField
                                                                     control={variantForm.control}
-                                                                    name="name"
+                                                                    name="title"
                                                                     render={({ field }) => (
                                                                         <FormItem>
                                                                             <FormLabel className="font-semibold text-muted-foreground">Name</FormLabel>
@@ -135,7 +136,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                 />
                                                                 <FormField
                                                                     control={variantForm.control}
-                                                                    name="meterial"
+                                                                    name="material"
                                                                     render={({ field }) => (
                                                                         <FormItem>
                                                                             <FormLabel className="font-semibold text-muted-foreground">meterial</FormLabel>
@@ -275,7 +276,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                 />
                                                                 <FormField
                                                                     control={variantForm.control}
-                                                                    name="quantity_in_stock"
+                                                                    name="inventory_quantity"
                                                                     render={({ field }) => (
                                                                         <FormItem>
                                                                             <FormLabel className="font-semibold text-muted-foreground">Quantity in stock</FormLabel>
@@ -301,7 +302,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
 
                                                                 <FormField
                                                                     control={variantForm.control}
-                                                                    name="EAN"
+                                                                    name="ean"
                                                                     render={({ field }) => (
                                                                         <FormItem>
                                                                             <FormLabel className="font-semibold text-muted-foreground">EAN (Barcode)</FormLabel>
@@ -322,7 +323,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                 />
                                                                 <FormField
                                                                     control={variantForm.control}
-                                                                    name="UPC"
+                                                                    name="upc"
                                                                     render={({ field }) => (
                                                                         <FormItem>
                                                                             <FormLabel className="font-semibold text-muted-foreground">UPC (Barcode)</FormLabel>
