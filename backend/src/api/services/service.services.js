@@ -5,11 +5,12 @@ import ServicesModel from "../models/services.model";
 import ServiceOfPets from "../models/serviceOfPets";
 import PetsModel from "../models/pets.model";
 import PusherClient from "../../configs/pusher";
+import CategoriesModel from "../models/categories.model";
 
 export const createNewServie = async (payload) => {
 
     const isServiceExist = await ServicesModel.exists({ name: payload.name });
-    if (isServiceExist)   throw createHttpError.HTTP_STATUS_BAD_REQUEST(`Service cannot be duplicated!`);
+    if (isServiceExist)   throw createHttpError.BadRequest(`Service cannot be duplicated!`);
 
     return ServicesModel.create(payload)
 };
@@ -17,7 +18,7 @@ export const createNewServie = async (payload) => {
 export const getAllService = async (payload) => {
     try {
         return await ServicesModel
-                    .find()
+                    .find().populate("total_service_of_pet")
                     // .sort({ createdAt: -1  })
     }catch (error) {
         throw createHttpError.BadRequest(error);
@@ -155,4 +156,18 @@ export const getServiceByPetIdNewVersion = async (payload) => {
         .unwind('$weightId')
 
     return data
+}
+
+
+
+export const removeService = async (id) => {
+    const existedClass = await ServicesModel.findOne({ _id: id }).populate('total_service_of_pet')
+    if (!existedClass) throw createHttpError.NotFound('Cannot find class to delete')
+    if (existedClass.total_service_of_pet > 0)
+        throw createHttpError.Conflict('Cannot delete Service due to there are category in this product !')
+    await ServicesModel.deleteOne({ _id: id })
+    return {
+        message: 'Service has been permanently deleted',
+        statusCode: 200
+    }
 }

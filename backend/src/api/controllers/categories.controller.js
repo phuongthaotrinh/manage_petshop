@@ -4,6 +4,7 @@ import {validateGetDetail, validateNewBrand} from "../validation/brand";
 import createHttpError from "http-errors";
 import {HttpStatusCode} from '../../configs/statusCode.config'
 import {getAllBrands} from "../services/brand.service";
+import {deleteCategory} from "../services/categories.service";
 
 
 // [POST] /api/brands/new-brand
@@ -71,3 +72,12 @@ export const updateCategoryById= useCatchAsync(async (req, res) => {
         });
     }
 });
+
+// [DELETE] /api/categories/delete
+
+export const removeClass = useCatchAsync(async (req, res) => {
+    const id = req.params.id
+    if (!id) throw createHttpError(HttpStatusCode.NO_CONTENT)
+    const result = await CategorisService.deleteCategory(id)
+    return res.status(result.statusCode).json(result)
+})

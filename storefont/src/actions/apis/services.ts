@@ -4,6 +4,7 @@ import {http} from "@/config/axiosClient";
 import {Pets, Weights} from "@/types/weight";
 import {ComboServiceResponse, Service, Services} from "@/types/service";
 import {QUERY_KEYS} from "@/actions/queryKeys";
+import {apiUrl} from "@/actions/apis/brand&categories";
 
 
 export const NewsAPI = {
@@ -25,6 +26,7 @@ export const NewsAPI = {
     SERVICES__GET_SERVICE_OF_PET : "services/get-service-of-pet",
     SERVICES__UPDATE_SERVICE_PRICE_F0R_PET : "services/update-service-of-pet",
     SERVICES__GET_SERVICE_OF_ALL_PETS : "services/get-service-of-all-pet",
+    SERVICE_DELETE_SERVICE: "services/delete",
 
     // [POST] /api/combo/new-combo-services
     SERVICES_COMBO__CREATE: 'combo/new-combo-services',
@@ -73,7 +75,9 @@ export async function getAllServices():Promise<Services[]> {
     const {data} =  await  http.get(NewsAPI.GET_ALL_SERVICES);
     return  data.data ? data.data: []
 }
-
+export async function deleteServices(payload:string) {
+    return await http.delete(`${NewsAPI.SERVICE_DELETE_SERVICE}/${payload}`)
+}
 export async function getDetailServiceById(serviceId:string):Promise<Service> {
     const {data} =  await  http.get(`${NewsAPI.SERVICES__GET_DETAIL_BY_ID}/${serviceId}`);
     return  data.data ? data.data: []

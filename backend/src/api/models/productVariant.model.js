@@ -2,17 +2,17 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import {productStatus} from "../../constants/product"
-const productImageSchema = new mongoose.Schema({
+const productVariantSchema = new mongoose.Schema({
     product_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
     },
-    image_id:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Images',
+    title:{
+        type:String,
+        required: true
     }
 }, {
-    collection: 'product_image',
+    collection: 'product_variant',
     timestamps: true,
     versionKey: false,
     toJSON: { virtuals: true },
@@ -20,5 +20,5 @@ const productImageSchema = new mongoose.Schema({
 })
 
 
-const ProductImage = mongoose.model('ProductImage', productImageSchema);
-export default ProductImage;
+const ProductVariant = mongoose.model('ProductVariant', productVariantSchema);
+export default ProductVariant;

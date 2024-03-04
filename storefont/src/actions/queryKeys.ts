@@ -22,7 +22,7 @@ export enum QUERY_KEYS {
     SERVICES__UPDATE_SERVICE_PRICE_F0R_PET= "services/updateServicePriceOfPet",
     SERVICES__GET_ALL_SERVICE_OF_PETS="services/getServiceOfPet",
     SERVICES__GET_SERVICE_OF_ALL_PETS="services/getAllServiceOfAllPet",
-
+    SERVICES__DELETE= "services/delete",
 
     //USERS
     CUSTOMERS_GET_ALL = "customers/getAllCustomers",

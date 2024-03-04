@@ -9,8 +9,7 @@ export const validateNewBrand = (payload) => {
             .required(),
 
         images:Joi.array(),
-        status:Joi.boolean().required(),
-        desc: Joi.string(),
+        status:Joi.boolean().required()
     })
     return schema.validate(payload)
 }

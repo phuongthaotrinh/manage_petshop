@@ -25,9 +25,15 @@ const servicesSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
   autoIndex: true
 })
-
+servicesSchema.plugin(mongooseAutoPopulate)
+servicesSchema.virtual('total_service_of_pet', {
+    localField: '_id',
+    foreignField: 'serviceId',
+    ref: 'ServiceOfPets',
+    count: true,
+    justOne: false,
+    options: { lean: true }
+})
 
 const ServicesModel = mongoose.model('Services', servicesSchema);
 export default ServicesModel;
-// servicesSchema.plugin(mongooseLeanVirtuals)
-// servicesSchema.plugin(mongooseAutoPopulate);

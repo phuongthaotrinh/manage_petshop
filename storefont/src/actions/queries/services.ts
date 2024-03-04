@@ -1,6 +1,8 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import * as SERVICE_ACTION from "@/actions/apis/services";
 import {QUERY_KEYS} from "@/actions/queryKeys";
+import * as ACTION from "@/actions/apis/brand&categories";
+import {deleteServices} from "@/actions/apis/services";
 
 
 //=======  PETS  =======//
@@ -110,6 +112,20 @@ const useGetDetailServiceById = (serviceId:string) => {
     });
 }
 
+const useDeleteService = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload:any) => SERVICE_ACTION.deleteServices(payload),
+        mutationKey:[QUERY_KEYS.SERVICES__DELETE],
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.SERVICES__GET_ALL],
+            });
+        },
+
+    });
+}
+
 const useSetServicesPrice = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -159,7 +175,6 @@ const useGetAllServiceOfAllPets = () => {
     });
 }
 
-
 //=======  SERVICES_COMBO  =======//
 export const useCreateServicesCombo = () => {
     const queryClient = useQueryClient();
@@ -208,5 +223,6 @@ export {
     useSetServicesPrice,
     useGetServiceOfPets,
     useUpdateServicesPrice,
-    useGetAllServiceOfAllPets
+    useGetAllServiceOfAllPets,
+    useDeleteService
 }

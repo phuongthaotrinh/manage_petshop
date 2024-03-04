@@ -214,7 +214,7 @@ export default function PetsServiceSetPrice(){
                        <Form {...form} >
                            <form onSubmit={form.handleSubmit(onSubmit)}>
                                <div className="mt-3">
-                                   {data && !isPending && !serviceOfPetSpin && priceDataWithId ? (
+                                   {data && !isPending && !serviceOfPetSpin ? (
                                        <div className=" rounded-lg">
                                            <div className=" px-4 py-2 flex font-semibold">
                                                <div className="w-1/2">Weight</div>

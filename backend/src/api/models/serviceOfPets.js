@@ -22,7 +22,8 @@ const servicesOfPetsSchema = new mongoose.Schema({
 }, {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
+    toJSON: { virtuals: true, transform: true },
+    toObject: { virtuals: true, transform: true },
     autoIndex: true
 })
 

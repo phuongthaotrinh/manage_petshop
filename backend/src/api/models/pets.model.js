@@ -22,8 +22,16 @@ const petsSchema = new mongoose.Schema({
   toJSON: { virtuals: true },
   autoIndex: true
 })
-petsSchema.plugin(mongooseLeanVirtuals)
+
 petsSchema.plugin(mongooseAutoPopulate);
+petsSchema.virtual('totalServiceOfPet', {
+  localField: '_id',
+  foreignField: 'petId',
+  ref: 'ServiceOfPets',
+  count: true,
+  justOne: false,
+  options: { lean: true },
+})
 
 const PetsModel = mongoose.model('Pet', petsSchema);
 // PetsModel.createIndexes()

@@ -101,6 +101,18 @@ export const useUpdateCategory = () => {
 
     });
 };
+export const useDeleteCategory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (payload:any) => ACTION.deleteCategory(payload),
+        mutationKey:[QUERY_KEYS.CATEGORIES_DELETE],
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [QUERY_KEYS.CATEGORIES_GET_ALL],
+            });
+        },
 
+    });
+};
 //useQueriesGetCateAndBrands
 

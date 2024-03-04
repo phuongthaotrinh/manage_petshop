@@ -2,6 +2,7 @@ import PetsModel from "../models/pets.model";
 import createHttpError from "http-errors";
 import NewsModel from "../models/news.model";
 import {toSentenceCase} from "../../helpers/toSentenceCase"
+import CategoriesModel from "../models/categories.model";
 export const createNewPets = async (payload) => {
     const isPostExist = await PetsModel.exists({ name: payload.name });
     if (isPostExist) {
@@ -16,7 +17,7 @@ export const createNewPets = async (payload) => {
 };
 
 export const getAllPets = async () => {
-    const data = await PetsModel.find()
+    const data = await PetsModel.find().populate("totalServiceOfPet")
     return data
 }
 
@@ -26,9 +27,13 @@ export const editPets = async(payload) =>{
 }
 
 export const deletePet = async (payload) => {
-    const data = PetsModel.deleteOne({
-        _id: payload._id
-    })
-    return data
-
+    const existedClass = await PetsModel.findOne({ _id: payload._id }).populate('totalServiceOfPet')
+    if (!existedClass) throw createHttpError.NotFound('Cannot find class to delete')
+    if (existedClass.totalServiceOfPet > 0)
+        throw createHttpError.Conflict('Cannot delete pet due to there are category in this product !')
+    await PetsModel.deleteOne({ _id: payload._id })
+    return {
+        message: 'Category has been permanently deleted',
+        statusCode: 200
+    }
 }
