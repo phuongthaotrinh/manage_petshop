@@ -1,10 +1,9 @@
 import express from 'express'
-import * as ProductController from "../controllers/product-attribute.control";
-
+import * as ProductController from "../controllers/product.controller"
 
 const router = express.Router();
 
-    router.post(`/products-attribute/create-attribute`, ProductController.createAttribute);
-    router.get(`/products-attribute/get-attributes`, ProductController.getAllProductAttributes);
-    router.patch(`/products-attribute/update-attributes`, ProductController.updateAttribute);
+// [POST] /api/product/create-product
+router.post('/product/create-product', ProductController.createProduct)
+
 export default router

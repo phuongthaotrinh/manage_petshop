@@ -25,6 +25,6 @@ router.get('/services/get-service-of-all-pet', ServiceController.getServiceOfAll
 
 //[GET] /api/services/get-service-of-pet-new-ver
 router.get('/services/get-service-of-pet-new-ver/:petId', ServiceController.getServiceOfPetIdNewVer);
-
+router.delete('/services/delete/:id', ServiceController.removeService)
 
 export default router

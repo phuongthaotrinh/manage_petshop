@@ -15,7 +15,7 @@ export const apiUrl = {
     CATEGORIES_GET_ALL: 'categories/get-all-categories',
     CATEGORIES_GET_DETAIL: 'categories/get-category-by-id',
     CATEGORIES_UPDATE:'categories/update-by-id',
-    CATEGORIES_DELETE: ''
+    CATEGORIES_DELETE: 'categories/remove'
 
 }
 export async function createNewBrand(payload:BrandCreate) {

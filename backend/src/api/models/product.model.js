@@ -16,12 +16,22 @@ const productSchema = new mongoose.Schema({
     weight:{type: String},
     length:{type: String},
     metadata:{type: String},
+    brand_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Brands',
+    },
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Categories',
+        autopopulate: true
+    }
 
 }, {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
-    autoIndex: true
+    autoIndex: true,
+    toJSON: { virtuals: true, transform: true },
+    toObject: { virtuals: true, transform: true }
 })
 
 

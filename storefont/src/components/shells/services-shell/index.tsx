@@ -6,12 +6,12 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header";
 import Link from "next/link";
 import {Badge} from "@/components/ui/badge";
-import {Edit, PawPrint, Settings} from "lucide-react";
+import {Edit, PawPrint, Settings, Trash} from "lucide-react";
 import {usePathname, useRouter} from "next/navigation";
 import {DataTableRaw} from "@/components/common/data-table/table-raw";
 import { Button } from "@/components/ui/button";
 import {toast} from "react-hot-toast";
-import {useGetAllServices, useGetPets} from "@/actions/queries/services";
+import {useDeleteService, useGetAllServices, useGetPets} from "@/actions/queries/services";
 import {Icons} from "@/components/common/icon";
 import {
     Tooltip,
@@ -27,10 +27,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
+import {catchError} from "@/lib/helpers";
 
 export function ServiceShellTemplate ( ) {
     const {data, isPending} = useGetAllServices();
-    const {data:pets, isPending:petSpin} = useGetPets()
+    const {data:pets, isPending:petSpin} = useGetPets();
+    const {mutateAsync} = useDeleteService()
     const [_, startTransition] = React.useTransition();
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])
     const pathname = usePathname()
@@ -119,6 +121,17 @@ export function ServiceShellTemplate ( ) {
                             })
                         }}>
                             <Edit className="mr-2 h-4 w-4" /> Edit
+                        </Button>
+                        <Button variant="link" onClick={() => {
+                            startTransition(() => {
+                                toast.promise((mutateAsync(row.original._id)),{
+                                    loading:"Deleting...",
+                                    success:() => "Delete sucess",
+                                    error:(e) => catchError(e)
+                                })
+                            })
+                        }}>
+                            <Trash className="mr-2 h-4 w-4 text-red-600" />
                         </Button>
 
                         {pets && pets?.length >=7 ? (

@@ -44,7 +44,7 @@ import { useForm } from "react-hook-form"
 import {Icons} from "@/components/common/icon";
 import {brandValidType,defaultBrand, formSchema} from "@/validations/brands"
 import {BrandForms} from "@/components/forms/brand-form";
-import {useCreateBrand, useGetBrands, useGetCategories} from "@/actions/queries/brand&categories";
+import {useCreateBrand, useDeleteCategory, useGetBrands, useGetCategories} from "@/actions/queries/brand&categories";
 import {Brands} from "@/types/brand";
 import {PageHeader, PageHeaderDescription, PageHeaderHeading, PageHeaderShell} from "@/components/common/page-header";
 import {Shell} from "@/components/shells/shell";
@@ -53,8 +53,9 @@ export  function CategoriesShell() {
     const pathname  = usePathname();
     const route = useRouter()
     const {data, isPending } = useGetCategories();
-
+    const {mutateAsync} = useDeleteCategory()
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])
+    const [_, startTransition] = React.useTransition();
 
     const columns = React.useMemo<ColumnDef<any, unknown>[]>(
         () => [
@@ -169,13 +170,13 @@ export  function CategoriesShell() {
                                     <AlertDialogAction
                                         disabled={isPending}
                                         onClick={() =>{
-                                            // startTransition(() => {
-                                            //     toast.promise((deleteFn({petId:row.original.id})),{
-                                            //         loading:"Deleting...",
-                                            //         success:() => "Delete sucess",
-                                            //         error:(e) => catchError(e)
-                                            //     })
-                                            // })
+                                            startTransition(() => {
+                                                toast.promise((mutateAsync(row.original._id)),{
+                                                    loading:"Deleting...",
+                                                    success:() => "Delete sucess",
+                                                    error:(e) => catchError(e)
+                                                })
+                                            })
                                         }}>
                                         Delete
                                     </AlertDialogAction>

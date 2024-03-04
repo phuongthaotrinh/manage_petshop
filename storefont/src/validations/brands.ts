@@ -5,8 +5,7 @@ export const formSchema = z.object({
         message: "brand name must be at least 2 characters.",
     }),
     images:z.array(z.string()),
-    status:z.boolean(),
-    desc:z.string()
+    status:z.boolean()
 });
 export const defaultBrand = {
     name: "",

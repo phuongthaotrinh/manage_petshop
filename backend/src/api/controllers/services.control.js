@@ -4,6 +4,7 @@ import { useCatchAsync } from "../../helpers/useCatchAsync"
 import { HttpStatusCode } from '../../configs/statusCode.config'
 import {validateNewService, validateSetServiceOfPet} from "../validation/services.validation";
 import * as ServicesS from "../services/service.services";
+import * as CategorisService from "../services/categories.service";
 
 
 
@@ -136,3 +137,11 @@ export const getServiceOfAllPets = useCatchAsync(async (req, res) => {
         });
     }
 });
+
+
+export const removeService = useCatchAsync(async (req, res) => {
+    const id = req.params.id
+    if (!id) throw createHttpError(HttpStatusCode.NO_CONTENT)
+    const result = await ServicesS.removeService(id)
+    return res.status(result.statusCode).json(result)
+})

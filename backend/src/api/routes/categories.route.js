@@ -14,4 +14,6 @@ router.get('/categories/get-category-by-id/:id',CategoryController.getOneCategor
 // [PATCH] /api/categories/update-by-id
 router.patch('/categories/update-by-id',CategoryController.updateCategoryById);
 
+router.delete('/categories/remove/:id', CategoryController.removeClass)
+
 export default router
