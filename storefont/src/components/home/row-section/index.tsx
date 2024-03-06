@@ -1,8 +1,6 @@
 'use client';
 
 import React  from "react";
-import {useKeenSlider} from "keen-slider/react"
-import "keen-slider/keen-slider.min.css";
 import clsx from "clsx";
 
 interface IRowSection {
@@ -15,15 +13,6 @@ interface IRowSection {
 }
 
 export function RowSection({title, bgColor, children,perView,spacing,href}: IRowSection) {
-
-    const [ref] = useKeenSlider<HTMLDivElement>({
-        loop: false,
-        mode: "free",
-        slides: {
-            perView: perView,
-            spacing: spacing
-        },
-    });
 
 
     return (
@@ -41,11 +30,9 @@ export function RowSection({title, bgColor, children,perView,spacing,href}: IRow
                         </div>
                     )}
                 </div>
-                <div className="">
-                    <div ref={ref} className="keen-slider">
-                        {children}
-                    </div>
-                </div>
+                     <div className="space-y-5">
+                         {children}
+                     </div>
             </section>
 
 

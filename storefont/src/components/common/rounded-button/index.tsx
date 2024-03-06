@@ -36,7 +36,12 @@ const RoundedButton: React.FC<RoundedButtonProps> = ({ children, backgroundColor
         <Magnetic>
             <div className={styles.roundedButton} style={{ overflow: "hidden" }} onMouseEnter={manageMouseEnter} onMouseLeave={manageMouseLeave} {...attributes}>
                 {children}
-                <div ref={circle} style={{ backgroundColor }} className={styles.circle}></div>
+                <div ref={circle} style={{
+                    backgroundImage: "url('https://res.cloudinary.com/dr9ebt5bg/image/upload/v1709133530/th%E1%BB%8F_cute_cga991.gif')",
+                    backgroundSize: 'cover',
+                    height: '100%',
+                    width: '100%'
+                }} className={styles.circle}></div>
             </div>
         </Magnetic>
     );

@@ -57,6 +57,6 @@ export enum QUERY_KEYS {
     //PRODUCT
     PRODUCT__CREATE = "products/create",
     PRODUCT__GET_ALL = "products/getAllProducts",
-
+    PRODUCT__GET_DETAIL = "products/getAllProducts",
 
 }

@@ -4,7 +4,7 @@ import { useCatchAsync } from "../../helpers/useCatchAsync"
 import { HttpStatusCode } from '../../configs/statusCode.config'
 import {validateNewService, validateSetServiceOfPet} from "../validation/services.validation";
 import * as ServicesS from "../services/service.services";
-import * as CategorisService from "../services/categories.service";
+import * as PetService from "../services/pets.service";
 
 
 
@@ -31,8 +31,10 @@ export const createNewService = useCatchAsync(async (req, res) => {
 export const getAllServices = useCatchAsync(async (req, res) => {
     try {
         const data = await ServicesS.getAllService();
+        const pets =await PetService.getAllPets()
         return res.status(HttpStatusCode.OK).json({
-            data
+            data,
+            pets
         })
     } catch (error) {
         return res.status(error.status || HttpStatusCode.INTERNAL_SERVER_ERROR).json({

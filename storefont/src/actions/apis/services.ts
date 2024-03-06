@@ -38,16 +38,19 @@ export async function createNewPets(payload:any) {
 
 
 export async function getALlPets() {
-    const res2 = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}${NewsAPI.GET_ALL}`,
-        {
-            method: "GET",
-        }
-    );
-    const data = await res2.json();
-    if(data?.data) {
-        return  data?.data ? data?.data as Pets[] : []
-    }
+    // const res2 = await fetch(
+    //     `${process.env.NEXT_PUBLIC_API_BACKEND}${NewsAPI.GET_ALL}`,
+    //     {
+    //         method: "GET",
+    //     }
+    // );
+    // const data = await res2.json();
+    // if(data?.data) {
+    //     return  data?.data ? data?.data as Pets[] : []
+    // }
+    const {data} =  await  http.get(NewsAPI.GET_ALL);
+    return  data.data ? data.data: []
+
 }
 
 export async function updatePets(payload:any) {

@@ -7,7 +7,9 @@ const nextConfig = {
             "bizweb.dktcdn.net",
             "multi-step-form-tawny.vercel.app",
             "i.ibb.co",
-            "utfs.io"
+            "utfs.io",
+            "img.freepik.com",
+            "petshop.fringestudio.com"
         ]
     },
     output: "standalone"

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {preLoaderAnimate} from "@/constants/animation";
 
-const words = ["Hello", "Bonjour", "Ciao", "Olà", "やあ", "Hallå", "Guten tag", "Hallo"]
+const words = ["WELCOME", "TO", "PETSHOP"]
 
 export  function Preloader() {
     const [index, setIndex] = useState(0);
@@ -39,7 +39,9 @@ export  function Preloader() {
         <motion.div variants={preLoaderAnimate.slideUp} initial="initial" exit="exit" className={styles.introduction}>
             {dimension.width > 0 &&
                 <>
-                    <motion.p variants={preLoaderAnimate.opacity} initial="initial" animate="enter"><span></span>{words[index]}</motion.p>
+                    <motion.p variants={preLoaderAnimate.opacity} initial="initial" animate="enter"><span></span>
+                        {words[index]}
+                    </motion.p>
                     <svg>
                         <motion.path variants={curve} initial="initial" exit="exit"></motion.path>
                     </svg>

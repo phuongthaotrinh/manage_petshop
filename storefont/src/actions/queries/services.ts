@@ -15,6 +15,9 @@ import {deleteServices} from "@/actions/apis/services";
             queryClient.invalidateQueries({
                 queryKey: [QUERY_KEYS.PETS_GET_PETS],
             });
+            queryClient.refetchQueries({
+                queryKey: [QUERY_KEYS.PETS_GET_PETS],
+            })
         },
     });
 };
@@ -23,7 +26,6 @@ const useGetPets = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.PETS_GET_PETS],
         queryFn: () => SERVICE_ACTION.getALlPets(),
-        staleTime: 5 * 1000,
 
     });
 };

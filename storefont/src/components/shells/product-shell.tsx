@@ -3,37 +3,39 @@
 import * as React from "react"
 import Link from "next/link"
 import {CopyIcon, EditIcon, MoreVertical, ScreenShareOffIcon, Trash} from "lucide-react"
-import {type ColumnDef} from "@tanstack/react-table"
-import {toast} from "react-hot-toast";
-import {catchError, formatDate} from "@/lib/helpers";
+import {type ColumnDef} from "@tanstack/react-table";
 import {Button} from "@/components/ui/button"
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {DataTable} from "@/components/common/data-table"
-import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header"
-import {fallbackImg} from "@/constants/fallbackImg";
+} from "@/components/ui/dropdown-menu";
+import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header";
 import {Checkbox} from "@/components/ui/checkbox"
 import {usePathname} from "next/navigation";
 import {DataTableRaw} from "@/components/common/data-table/table-raw";
+import {useGetListProduct} from "@/actions/queries/products";
+import {useGetBrands} from "@/actions/queries/brand&categories";
 
 interface ProductsTableShellProps {
-    data: any[]
+    mode: 'draft' | 'published'
 }
 
-export function ProductTableShell({
-                                   data
-                               }: ProductsTableShellProps) {
+export function ProductTableShell({mode}:ProductsTableShellProps ) {
+    const {data: raw, isPending:_,isError} = useGetListProduct();
+    const {data: brands, isPending:brandSpin} = useGetBrands()
+    const data = React.useMemo(() => {
+        return raw?.filter((i:any) => i?.status === mode)
+    },[raw,mode])
+
+    console.log("mode", mode);
+    console.log("data", data)
+
     const [isPending, startTransition] = React.useTransition()
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])
     const pathname = usePathname();
 
-    const deleteUser = () => { }
     // Memoize the columns so they don't re-render on every render
     const columns = React.useMemo<ColumnDef<any, unknown>[]>(
         () => [
@@ -48,7 +50,7 @@ export function ProductTableShell({
                         onCheckedChange={(value) => {
                             table.toggleAllPageRowsSelected(!!value);
                             setSelectedRowIds((prev) =>
-                                prev.length === data.length ? [] : data.map((row) => row.id)
+                                prev.length === data.length ? [] : data.map((row:any) => row.id)
                             )
                         }}
                         aria-label="Select all"
@@ -73,6 +75,7 @@ export function ProductTableShell({
                 enableSorting: false,
                 enableHiding: false,
             },
+
             {
                 accessorKey: "title",
                 header: ({column}) => (
@@ -92,34 +95,38 @@ export function ProductTableShell({
                 },
             },
             {
-                accessorKey: "collection_id",
+                accessorKey: "category_ids",
                 header: ({column}) => (
-                    <DataTableColumnHeader column={column} title="Collection"/>
+                    <DataTableColumnHeader column={column} title="Categories"/>
                 ),
                 cell: ({row}) => {
-                    const url = row.original.thumbnail
+                        const cate =row.original.categories as any[]
                     return (
-                        <div >
-                            {row.original.collection ? row.original.collection?.title : '-'}
-                        </div>
+                        <>
+                            {cate && cate?.map((i, j) => (
+                                <p key={j}>
+                                    {i?.name}
+                                </p>
+                            ))}
+                        </>
                     )
                 },
             },
             {
-                id: "subtitle",
+                accessorKey: "brand_id",
                 header: ({column}) => (
-                    <DataTableColumnHeader column={column} title="Inventory"/>
+                    <DataTableColumnHeader column={column} title="Brand"/>
                 ),
                 cell: ({row}) => {
-                    const randomQuanty = Math.floor(Math.random() * 10) + 1
                     return (
-                        <div >
-
-                            {randomQuanty} in stock for {randomQuanty} variant(s)
-                        </div>
+                        <>
+                           <span> {row.original.brand?.name}     </span>
+                            <img src={row.original.brand?.images} alt={row.original.brand?.name} className="max-w-10"/>
+                        </>
                     )
                 },
             },
+
             {
                 id: "actions",
                 cell: ({row}) => (
@@ -150,44 +157,25 @@ export function ProductTableShell({
                 ),
             },
         ],
-        [data, isPending]
+        [data, isPending, mode]
     )
 
     function deleteSelectedRows() {
 
     }
 
-    const userStatus = [
-        {
-            label: 'active',
-            value: '0'
-        },
-        {
-            label: 'block',
-            value: '1'
-        }
-    ]
+
     return (
         <>
-            {data && (
+            {data && !brandSpin && (
                 <DataTableRaw
                     showToolbar={true}
                     columns={columns}
                     data={data}
                     searchableColumns={[
                         {
-                            id: "name",
-                            title: "name",
-                        },
-                    ]}
-                    filterableColumns={[
-                        {
-                            id: "block",
-                            title: "status",
-                            options: userStatus.map((category) => ({
-                                label: category.label,
-                                value: category.value,
-                            })),
+                            id: "title",
+                            title: "title",
                         },
                     ]}
                     newRowLink={`${pathname}/create`}

@@ -64,28 +64,23 @@ export const navigationConfig: NavbarConfig = {
         {
             image: 'services-1.png',
             title: 'Đặt Hàng Online',
-            link:'',
             desc:'Giao hàng hỏa tốc, nội thành trong 2 tiếng'
         },
         {
             image: 'services-2.png',
             title: 'Cắt Tỉa & Spa',
-            link:'',
             desc:'Với quy trình 10 bước cắt tỉa, tạo kiểu cùng những thợ groomer hàng đầu.'
         },
         {
             image: 'services-3.png',
             title: 'Khách Sạn & Lưu Chuồng',
-            link:'',
             desc:'Chăm sóc và bảo vệ bé cún, mèo của bạn 24/7'
         },
         {
-            image: 'services-5.png',
+            image: 'service-5-new.png',
             title: 'Bác Sĩ Thú Y',
-            link:'',
             desc:'Khám chữa bệnh với các thiết bị hiện đại'
-        }
-
+        },
     ],
     services2:[
         {

@@ -104,3 +104,10 @@ export function truncate(str: string, length: number) {
     return str.length > length ? `${str.substring(0, length)}...` : str
 }
 
+
+export function generateUniqueId () {
+    const numberR = Math.floor(Math.random() * 100).toString();
+    const now = Date.now()
+
+    return `${numberR}_${now}`
+}

@@ -1,12 +1,13 @@
 // libraries
-import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
 import rootRouter from './api/routes';
 import path from 'path';
-import multer from "multer"
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+
 
 
 
@@ -20,7 +21,7 @@ const app = express()
 
 /* Request body parser */
 app.use(express.json())
-
+app.use(bodyParser.json());
 
 /* Logger */
 app.use(morgan('tiny'))

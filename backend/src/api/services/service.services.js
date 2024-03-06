@@ -17,6 +17,7 @@ export const createNewServie = async (payload) => {
 
 export const getAllService = async (payload) => {
     try {
+
         return await ServicesModel
                     .find().populate("total_service_of_pet")
                     // .sort({ createdAt: -1  })

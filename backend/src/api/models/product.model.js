@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema({
     brand_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Brands',
+
     },
     category_ids: [
         {

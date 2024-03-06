@@ -8,7 +8,7 @@ interface IService2Card {
 export function Service2Card({item}: IService2Card) {
     return (
         <>
-            <div className="keen-slider__slide">
+            <div className="">
                 <div className="grid place-items-center">
 
                     {item.isImage ? (
