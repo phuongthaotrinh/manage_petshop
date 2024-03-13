@@ -32,13 +32,11 @@ import {
 import { useFieldArray} from "react-hook-form";
 import type {UseFormReturn} from "react-hook-form"
 import { ICustomers } from "@/validations/customers"
-import {Provinces} from "@/components/common/provinces";
 import {userRoles} from "@/constants/fakeData"
 import {ShellAction} from "@/components/common/shell-action";
 import {Uploads} from "@/components/common/uploads";
 import {RenderImage} from "@/components/common/render-image";
-import {ScrollArea, ScrollBar} from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator"
+import {GHNProvinces} from "@/components/common/provinces/GHNProvinces";
 
 interface ICustommersForm {
     onSubmit:(values:Omit<ICustomers, '_id'>) => void,
@@ -46,20 +44,16 @@ interface ICustommersForm {
     reset:() => void,
     images:string[],
     setImages:  React.Dispatch<React.SetStateAction<string[]>>,
-    citySelect:string,
-    districtSelect:string,
-    wardSelect:string,
-    setDistrictSelect: React.Dispatch<React.SetStateAction<string>>,
-    setWardSelect: React.Dispatch<React.SetStateAction<string>>,
-    setCitySelect: React.Dispatch<React.SetStateAction<string>>,
     date:Date | undefined,
     setDate: React.Dispatch<React.SetStateAction<Date | undefined>>,
-    isEditMode:boolean
+    isEditMode:boolean,
+    updateProvince:(value:any) => void,
+    userProvince:any
 
 }
 
 
-export function CustommersForm({onSubmit,  isEditMode, form, reset, images, wardSelect,setImages, citySelect,districtSelect,setDistrictSelect, setWardSelect,setCitySelect}:ICustommersForm) {
+export function CustommersForm({onSubmit,updateProvince,  userProvince, isEditMode, form, reset, images,setImages}:ICustommersForm) {
 
     const {fields, append, remove, prepend} = useFieldArray({
         name: "socials",
@@ -232,17 +226,10 @@ export function CustommersForm({onSubmit,  isEditMode, form, reset, images, ward
                                     </FormItem>
                                 )}
                             />
-                            <Provinces form={form}
-                                       citySelect={citySelect}
-                                       districtSelect={districtSelect}
-                                       setCitySelect={setCitySelect}
-                                       setDistrictSelect={setDistrictSelect}
-                                       setWardSelect={setWardSelect}
-                                       key="customer_form"
-                                       wardSelect={wardSelect}
-                                       isEditMode={isEditMode}
-                            />
-                        <FormField
+
+                            <GHNProvinces  form={form} updateProvince={updateProvince} userProvince={userProvince}/>
+
+                            <FormField
                             control={form.control}
                             name="bio"
                             render={({field}) => (

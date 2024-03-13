@@ -1,7 +1,5 @@
 'use client';
-import {DialogContent, Dialog } from "@/components/ui/dialog"
 
-import {Card} from "@/components/ui/card";
 import Link from "next/link"
 import React from "react";
 import {formatPrice} from '@/lib/helpers'

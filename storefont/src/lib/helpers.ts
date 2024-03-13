@@ -111,3 +111,20 @@ export function generateUniqueId () {
 
     return `${numberR}_${now}`
 }
+
+
+
+///CART
+const FREE_SHIP_MONEY=800000
+
+
+
+export const calcShippingFee = (userPrice: number) => {
+    const a = 100 - ((FREE_SHIP_MONEY - userPrice) / FREE_SHIP_MONEY) * 100;
+    const b = FREE_SHIP_MONEY - userPrice;
+
+    return {
+        needMore: b <= 0 ? 0 : formatPrice(b),
+        percent: `${a}%`
+    };
+}

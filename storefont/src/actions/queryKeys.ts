@@ -59,4 +59,5 @@ export enum QUERY_KEYS {
     PRODUCT__GET_ALL = "products/getAllProducts",
     PRODUCT__GET_DETAIL = "products/getAllProducts",
 
+    GET_SHIPPING_FEE ="shipping/getFee"
 }

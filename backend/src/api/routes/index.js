@@ -9,7 +9,7 @@ import BrandsRoute from './brand.route';
 import CategoriesRoute from './categories.route';
 import ComboRoute from "./combo.route";
 import ProductRoute from "./products.route";
-
+import PaymentRoute from "./payment"
 const rootRouters = [
 	UserRouter,
 	NewsRouter,
@@ -20,7 +20,8 @@ const rootRouters = [
 	BrandsRoute,
 	CategoriesRoute,
 	ComboRoute,
-	ProductRoute
+	ProductRoute,
+	PaymentRoute
 ]
 
 const router = express.Router();

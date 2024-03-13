@@ -13,7 +13,6 @@ import {catchError} from "@/lib/helpers";
 
 export default function CustomerCreatePage() {
 
-    const router = useRouter()
     const form = useForm<Omit<ICustomers, "_id">>({
         resolver: zodResolver(formSchema),
         defaultValues: intialValue,
@@ -21,11 +20,12 @@ export default function CustomerCreatePage() {
     });
 
     const [date, setDate] = React.useState<Date>();
-    const [citySelect, setCitySelect] = React.useState<string>("");
-    const [districtSelect, setDistrictSelect] = React.useState<string>("")
-    const [wardSelect, setWardSelect] = React.useState<string>("")
     const [images, setImages] = React.useState<string[]>([])
-    const [isPending, startTransition] = React.useTransition()
+    const [isPending, startTransition] = React.useTransition();
+    const [userProvince, setUserProvince] = React.useState({})
+
+
+
 
     const onSubmit =  (values: Omit<ICustomers, "_id">) => {
 
@@ -34,15 +34,17 @@ export default function CustomerCreatePage() {
 
     };
 
+    const updateProvince = (value:any) => {
+        const payload = {...userProvince, ...value};
+        setUserProvince(payload)
+    }
 
 
 
 
     const reset = () => {
         form.reset(intialValue);
-        setCitySelect("");
-        setDistrictSelect("");
-        setWardSelect("");
+
         setImages([])
     }
 
@@ -59,10 +61,8 @@ export default function CustomerCreatePage() {
             <CustommersForm onSubmit={onSubmit}
                             reset={reset} date={date} setDate={setDate}
                             form={form} images={images} setImages={setImages}
-                            citySelect={citySelect} districtSelect={districtSelect}
-                            setDistrictSelect={setDistrictSelect} setWardSelect={setWardSelect}
-                            setCitySelect={setCitySelect}
-                            wardSelect={wardSelect}
+                            updateProvince={updateProvince}
+                            userProvince={userProvince}
                             isEditMode={false}
 
             />

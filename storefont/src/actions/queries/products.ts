@@ -6,7 +6,7 @@ import {
 
 import { QUERY_KEYS } from "@/actions/queryKeys";
 import * as ACTION from "@/actions/apis/products" ;
-import {http} from "@/config/axiosClient";
+import {http} from "../../config/axiosClient";
 import {NewsAPI} from "@/actions/apis/services";
 
 
@@ -49,3 +49,5 @@ import {NewsAPI} from "@/actions/apis/services";
      })
 
  }
+
+

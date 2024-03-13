@@ -1,8 +1,6 @@
 'use client';
 
 import * as React from "react";
-import {SidebarNav} from "@/components/auth/side-nav"
-import {navigationConfig} from "@/constants/navigation";
 
 interface IProps {
     children: React.ReactNode,

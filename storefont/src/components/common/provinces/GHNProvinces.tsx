@@ -1,82 +1,70 @@
-'use client';
+'use client'
 
-
-import * as React from "react";
-import type {UseFormReturn} from "react-hook-form";
-import {http} from "@/config/axiosClient";
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import useIsomorphicLayoutEffect from "@/hooks/use-isomorphic-layout-effect"
+import {useQuery} from "@tanstack/react-query"
+import * as React from "react";
+import {UseFormReturn} from "react-hook-form";
 
-interface IProvinces {
-    form: UseFormReturn<any>,
-    citySelect: any,
-    districtSelect: any,
-    wardSelect:any,
-    setCitySelect: any,
-    setDistrictSelect: any,
-    setWardSelect: any,
-    isEditMode:boolean
-}
-
-export function Provinces({
-                              form,
-                              districtSelect,
-                              citySelect,
-                              setCitySelect,
-                              setWardSelect,
-                              setDistrictSelect,
-                              isEditMode
-
-                          }: IProvinces) {
-    const [trigger, setTrigger] = React.useState<boolean>(false);
-    const [trigger2, setTrigger2] = React.useState<boolean>(false);
-    const [trigger3, setTrigger3] = React.useState<boolean>(false)
-
-    const [cities, setCities] = React.useState<any[]>([]);
-    const [districts, setDistricts] = React.useState<any[]>([]);
-    const [wards, setWards] = React.useState<any[]>([]);
+const URL ="https://dev-online-gateway.ghn.vn/shiip/public-api/master-data"
+export function GHNProvinces ({form, updateProvince, userProvince}:{form:UseFormReturn<any>, updateProvince:(value:any) => void,userProvince:any}) {
 
 
-    React.useEffect(() => {
-        if (trigger || isEditMode) {
-            (async () => {
-                const {data} = await http.get('https://provinces.open-api.vn/api/p');
-                setCities(data);
-            })()
-            setTrigger(false)
-        }
-    }, [trigger,isEditMode]);
+
+    const [citySelect, setCitySelect] = React.useState<string>("");
+    const [districtSelect, setDistrictSelect] = React.useState<string>("")
+    const [wardSelect, setWardSelect] = React.useState<string>("")
+
+    const [trigger, setTrigger] = React.useState(false)
+
+    const {data:province} = useQuery({
+        queryKey:['Provinces'],
+        queryFn: async ()  => {
+            const data =await(await fetch(`${URL}/province`,{
+                headers: {
+                    token:process.env.NEXT_PUBLIC_GHN_TOKEN!!
+                },
+            })).json()
+            return data.data
+        },
+        enabled:!trigger,
+        retry: 1,
+        refetchInterval: 0
+    })
 
 
-    const fetchData = async () => {
-        try {
-            if ((citySelect.length > 0 && trigger2) || (isEditMode && citySelect.length > 0)) {
+    const {data:si} = useQuery({
+        queryKey:['districts',citySelect],
+        queryFn: async ()  => {
+            const data =await( await fetch(`${URL}/district?province_id=${citySelect}`,{
+                headers: {
+                    token:process.env.NEXT_PUBLIC_GHN_TOKEN!!
+                },
+            })).json()
+            return data.data
+        },
+        enabled:!!citySelect,
+        retry: 1,
+        refetchInterval: 0
+    })
+    const {data:ward} = useQuery({
+        queryKey:['ward',districtSelect],
+        queryFn: async ()  => {
+            const data =await( await fetch(`${URL}/ward?district_id=${districtSelect}`,{
+                headers: {
+                    token:process.env.NEXT_PUBLIC_GHN_TOKEN!!
+                },
+            })).json()
+            return data.data
+        },
+        enabled:!!districtSelect,
+        retry: 1,
+        refetchInterval: 0
+    })
 
-                const response = await http.get(`https://provinces.open-api.vn/api/p/${Number(citySelect)}?depth=2`);
-                setDistricts(response.data?.districts || []);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-    React.useEffect(() => {
-        fetchData();
-    }, [citySelect, trigger2,isEditMode]);
 
 
-    React.useEffect(() => {
-        if ((districtSelect.length > 0 && trigger3)|| (isEditMode && districtSelect.length > 0)) {
-            (async () => {
-                const {data} = await http.get(`https://provinces.open-api.vn/api/d/${Number(districtSelect)}?depth=2`);
-                setWards(data?.wards as any[]);
-            })()
-        }
-    }, [districtSelect, trigger3,isEditMode])
-
-
-    return (
+    return  (
         <>
             <div className="grid md:grid-cols-3 sx:grid-cols-1 gap-3">
                 <FormField
@@ -87,8 +75,9 @@ export function Provinces({
                             <FormItem>
                                 <FormLabel>Thành phố</FormLabel>
                                 <Select onValueChange={(event) => {
-                                        field.onChange(event);
-                                        setCitySelect(event)
+                                    field.onChange(event);
+                                    setCitySelect(event);
+                                    updateProvince({...userProvince, city: event})
                                 }}
                                         value={field.value}
                                         onOpenChange={(open) => setTrigger(true)}>
@@ -98,10 +87,10 @@ export function Provinces({
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {cities && cities.map((item, index) => {
+                                        {province && province.map((item:{ProvinceID: number,ProvinceName:string }, index:number) => {
                                             return (
-                                                <SelectItem key={index} value={item.code.toString()}>
-                                                    {item.name}
+                                                <SelectItem key={index} value={item.ProvinceID.toString()}>
+                                                    {item.ProvinceName}
                                                 </SelectItem>
                                             )
                                         })}
@@ -122,19 +111,22 @@ export function Provinces({
                                 <FormLabel>Quận / Huyện</FormLabel>
                                 <Select onValueChange={(event) => {
                                     field.onChange(event);
-                                    setDistrictSelect(event)
-                                }} value={field.value!}
-                                        onOpenChange={(open) => setTrigger2(true)}>
+                                    setDistrictSelect(event);
+                                    updateProvince({...userProvince, district: event})
+
+                                }}
+                                        value={field.value!}
+                                >
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Choose district"/>
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {districts && districts.map((item, index) => {
+                                        {si && si.map((item:{DistrictID:number, DistrictName:string}, index:number) => {
                                             return (
-                                                <SelectItem key={index} value={item.code.toString()}>
-                                                    {item.name}
+                                                <SelectItem key={index} value={item.DistrictID.toString()}>
+                                                    {item.DistrictName}
                                                 </SelectItem>
                                             )
                                         })}
@@ -155,20 +147,21 @@ export function Provinces({
                                 <FormLabel>Phường / Xã</FormLabel>
                                 <Select onValueChange={(event) => {
                                     field.onChange(event);
-                                    setWardSelect(event)
+                                    setWardSelect(event);
+                                    updateProvince({...userProvince, ward: event})
+
                                 }}
-                                        value={field.value!}
-                                        onOpenChange={(open) => setTrigger3(true)}>
+                                        value={field.value!}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Choose ward"/>
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        {wards && wards.map((item, index) => {
+                                        {ward && ward.map((item:{WardCode: number, WardName:string}, index:number) => {
                                             return (
-                                                <SelectItem key={index} value={item.code.toString()}>
-                                                    {item.name}
+                                                <SelectItem key={index} value={item.WardCode.toString()}>
+                                                    {item.WardName}
                                                 </SelectItem>
                                             )
                                         })}
@@ -181,9 +174,6 @@ export function Provinces({
                     }}
                 />
             </div>
-
         </>
     )
 }
-
-

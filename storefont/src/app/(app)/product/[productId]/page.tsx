@@ -5,6 +5,11 @@ import {GallaryCarousel} from "@/components/common/gallary-carousel";
 import { EmblaOptionsType } from 'embla-carousel'
 import {ProductDetailTemplate} from "@/components/product-detail-template";
 import {UseQueryResult} from "@tanstack/react-query";
+import {Shell} from "@/components/shells/shell"
+
+
+
+
 interface IParams{
     params: {productId: string}
 }
@@ -23,7 +28,7 @@ export default function ProductDetailPage({params}:IParams )  {
 
 
     return (
-        <div className="py-10 mb-9 container">
+        <Shell variant="default">
                 <div className="grid grid-cols-2 gap-3">
 
             <div id="gallary">
@@ -40,6 +45,6 @@ export default function ProductDetailPage({params}:IParams )  {
 
 
                 </div>
-        </div>
+        </Shell>
     )
 }

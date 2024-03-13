@@ -110,11 +110,11 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
                         />
 
                         <div className="flex gap-3 items-center w-full">
-                            <Button type="submit" variant="addToCard" className="w-full" onClick={() => setMode("addCart")}>
+                            <Button type="submit" size="lg" variant="addToCard" className="w-full" onClick={() => setMode("addCart")}>
                                 <ShoppingBag  className="w-4 h-4- mr-2" />
                                 Add to cart
                             </Button>
-                            <Button type="submit" variant="default" className="w-full"  onClick={() => setMode("payment")}>
+                            <Button type="submit" size="lg" variant="default" className="w-full"  onClick={() => setMode("payment")}>
                                 <ArrowRightIcon  className="w-4 h-4- mr-2" />
                                 Payment
                             </Button>

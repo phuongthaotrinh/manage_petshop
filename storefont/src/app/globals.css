@@ -32,7 +32,37 @@
 
     --dream:218, 91%, 23%;
     --dream-pink: 328.571, 100%, 41%;
-    --dream-orange:35.77,94.55%,56.86%
+    --dream-orange:35.77,94.55%,56.86%;
+
+
+    --shop-color-bg: #ffffff;
+    --shop-color-main: #333333;
+    --shop-color-text: #333333;
+    --shop-color-title: #333333;
+    --shop-color-hover: #000000;
+    --shop-color-button: #333333;
+    --shop-color-button-text: #ffffff;
+    --shop-color-border: #e7e7e7;
+    --header-bg: #ffffff;
+    --header-color-text: #333333;
+    --topbar-bg: #4d80eb;
+    --topbar-color-text: #ffffff;
+    --home-coupon-bg: #ffffff;
+    --home-coupon-light: #ffffff;
+    --home-coupon-border: #f8d0d3;
+    --home-coupon-text: #333333;
+    --footer-bg-color-1: #f5f5f5;
+    --footer-bg-color-2: #f5f5f5;
+    --footer-bg-color-copyright: #f5f5f5;
+    --footer-color-title: #000000;
+    --footer-color-text: #666666;
+    --footer-color-hover: #999;
+    --home-flashsale-bg: #faefec;
+    --home-flashsale-color-title: #333333;
+    --home-flashsale-color-light: #FCE700;
+    --home-flashsale-countdown-bg: #FF0000;
+    --home-flashsale-countdown-color-txt: #ffffff;
+
 
   }
  

@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from 'react';
 import {AnimatePresence} from 'framer-motion';
-import {Preloader} from "@/components/common/preloader";
+// import {Preloader} from "@/components/common/preloader";
 import {Landing} from "@/components/home/landing";
 import {RowSection} from "@/components/home/row-section";
 import {navigationConfig} from "@/constants/navigation";
@@ -36,9 +36,7 @@ export default function Home() {
 
     return (
         <main>
-            {initPage === 0 &&  <AnimatePresence mode='wait'>
-                {isLoading && <Preloader/>}
-            </AnimatePresence>}
+
             <div className="space-y-10">
                 <Landing/>
                 <RowSection title="Chào mừng bạn đến với hệ thống cửa hàng" perView={4} spacing={60}>

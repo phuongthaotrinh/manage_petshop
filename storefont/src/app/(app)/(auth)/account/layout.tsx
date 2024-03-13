@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from "react";
-import {SidebarNav} from "@/components/auth/side-nav"
+import {SidebarNav} from "@/components/side-nav"
 import {navigationConfig} from "@/constants/navigation";
 import {HorizontalMenu} from "@/components/common/horizontal-menu"
 interface IAccount {
