@@ -100,11 +100,11 @@ export default function CartPage() {
                  <section id="info_mation" className="space-y-5 w-full overflow-hidden">
                      <Card id="card_cart_price" className="rounded shadow-sm">
                          <CardHeader>
-                             <CardTitle >Thông tin đơn hàng   </CardTitle>
+                             <CardTitle>Order Information</CardTitle>
                          </CardHeader>
                          <CardContent className="space-y-5">
                              <div className="flex items-center justify-between">
-                                 <h3 className="font-semibold">Tổng tiền: </h3>
+                                 <h3 className="font-semibold">Price: </h3>
                                  <span className="text-2xl text-red-600 font-semibold">{formatPrice(tempPrice)}</span>
                              </div>
                              <DropdownMenuSeparator />

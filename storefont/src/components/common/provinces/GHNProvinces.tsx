@@ -73,7 +73,7 @@ export function GHNProvinces ({form, updateProvince, userProvince}:{form:UseForm
                     render={({field}) => {
                         return (
                             <FormItem>
-                                <FormLabel>Thành phố</FormLabel>
+                                <FormLabel>City</FormLabel>
                                 <Select onValueChange={(event) => {
                                     field.onChange(event);
                                     setCitySelect(event);
@@ -108,7 +108,7 @@ export function GHNProvinces ({form, updateProvince, userProvince}:{form:UseForm
                     render={({field}) => {
                         return (
                             <FormItem>
-                                <FormLabel>Quận / Huyện</FormLabel>
+                                <FormLabel>District</FormLabel>
                                 <Select onValueChange={(event) => {
                                     field.onChange(event);
                                     setDistrictSelect(event);
@@ -144,7 +144,7 @@ export function GHNProvinces ({form, updateProvince, userProvince}:{form:UseForm
                     render={({field}) => {
                         return (
                             <FormItem>
-                                <FormLabel>Phường / Xã</FormLabel>
+                                <FormLabel>Ward</FormLabel>
                                 <Select onValueChange={(event) => {
                                     field.onChange(event);
                                     setWardSelect(event);

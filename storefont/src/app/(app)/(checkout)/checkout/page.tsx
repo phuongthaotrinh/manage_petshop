@@ -18,6 +18,7 @@ import {paymentFn, useGetShipFee} from "@/actions/queries/payment"
 import { useEffect} from "react";
 import {ReloadIcon} from "@radix-ui/react-icons";
 import {usePathname, useRouter} from "next/navigation";
+import { ArrowBigRight } from 'lucide-react';
 
 
 
@@ -121,7 +122,7 @@ export default function CheckoutPage() {
                                             <FormItem>
                                                 <FormLabel>Name</FormLabel>
                                                     <FormControl>
-                                                      <Input {...field}/>
+                                                      <Input {...field} placeholder="John Doe"/>
                                                     </FormControl>
 
                                                 <FormMessage />
@@ -136,7 +137,7 @@ export default function CheckoutPage() {
                                             <FormItem>
                                                 <FormLabel>Phone number</FormLabel>
                                                 <FormControl>
-                                                    <Input {...field}/>
+                                                    <Input {...field} placeholder="0123456789"/>
                                                 </FormControl>
 
                                                 <FormMessage />
@@ -150,7 +151,7 @@ export default function CheckoutPage() {
                                                 <FormItem>
                                                     <FormLabel>Address</FormLabel>
                                                     <FormControl>
-                                                        <Input {...field}/>
+                                                        <Input {...field} placeholder="123 Wall Street..."/>
                                                     </FormControl>
 
                                                     <FormMessage />
@@ -160,13 +161,13 @@ export default function CheckoutPage() {
 
                                         <GHNProvinces  form={form} updateProvince={updateProvince} userProvince={userProvince}/>
 
-                                     <div className="flex items-center justify-between">
+                                     <div className="flex items-center justify-between mt-5">
                                             <Link href="/cart" className="text-blue-700 font-semibold">
                                                 Your cart
                                             </Link>
-                                         <Button type="submit" disabled={isPending} >
+                                         <Button  size="lg" type="submit" disabled={isPending} >
                                              {isPending &&  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> }
-                                             {isPending ? "Loading" : "Go to payment"}
+                                             {isPending ? "Loading" : <> <ArrowBigRight  className="w-4 h-4 mr-2"/>  Go to payment</>}
                                          </Button>
                                      </div>
                                     </form>

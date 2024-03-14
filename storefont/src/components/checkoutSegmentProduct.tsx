@@ -26,15 +26,15 @@ export const CheckoutSegmentProduct = ({isPending, fee}:{isPending:boolean,fee: 
                 </div>
                 <DropdownMenuSeparator />
                 <div className="grid grid-cols-2 my-3  justify-between space-y-1">
-                    <p>Tạm tính</p>
+                    <p>Temporary price</p>
                     <p>7,837,500₫</p>
-                    <p>Phí vận chuyển</p>
+                    <p>Shipping Fee</p>
                     <p>{fee ? formatPrice(fee): '_____'}</p>
                 </div>
                 <DropdownMenuSeparator />
 
                 <div className="grid grid-cols-2 my-3 justify-between items-center">
-                    <p>Tổng cộng</p>
+                    <p>Total</p>
                     <p className="text-2xl font-semibold">7,837,500₫</p>
                 </div>
             </section></>
