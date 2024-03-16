@@ -8,8 +8,8 @@ import { Card, CardContent } from "@/components/ui/card"
 import {clsx} from "clsx"
 
 
-export function FeaturedProduct() {
-    const {data, isPending, isError} = useGetListProduct();
+export function FeaturedProduct({data, isPending, isError}:{data:any, isPending:any, isError:any}) {
+    // const {data, isPending, isError} = useGetListProduct();
     const dataLenght = data?.length;
     if(data)
         return (

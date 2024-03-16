@@ -8,8 +8,37 @@ import {useForm} from "react-hook-form";
 import {ILoginForm, intialValue, signInSchema} from "@/validations/auth-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {toast} from "react-hot-toast";
+import {useManualLogin} from "@/actions/queries/customers";
+import React from "react";
+import http from '@/lib/http'
+import {useRouter} from "next/navigation";
+import { useQueryClient } from '@tanstack/react-query'
+
+
+
+
+const authApiRequest = {
+    login: (body: any ) => http.post<any>('auth/login', body),
+    register: (body: any) =>
+      http.post<any>('/auth/register', body),
+      auth: (body: { accessToken: string, role:string }) =>
+      http.post('api/auth', body, {
+        baseUrl: ''
+      })
+  }
+
 
 export default function Signin() {
+    const [_, startTransition] = React.useTransition();
+
+    const [loading, setLoading] = React.useState(false);
+    const queryClient = useQueryClient();
+
+
+
+
+    const router = useRouter()
+    const {mutateAsync} = useManualLogin()
     const form = useForm<ILoginForm>({
         resolver: zodResolver(signInSchema),
         defaultValues:intialValue
@@ -17,9 +46,28 @@ export default function Signin() {
 
 
     async function onSubmit(values: ILoginForm) {
-        toast(JSON.stringify(values, undefined, 2))
+    
+        if (loading) return
+        setLoading(true);
+        toast('loginning....')
+        
+    try {
+        const result = await authApiRequest.login(values);
+        const res = await authApiRequest.auth({ accessToken: result.payload.accessToken , role: result.payload.user.role});
+        toast.sucess('login suceess, wait 3s....')
 
-    }
+        if(res.payload) {
+            if(["Customers","Guest"].includes(res.payload?.role))  router.push('/')
+            else  router.push('/admin/store/info')
+            
+        }
+       
+      } catch (error: any) {
+        console.log("adad", error)
+      } finally {
+        setLoading(false)
+      }
+    }    
 
     return (
         <>

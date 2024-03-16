@@ -3,10 +3,9 @@ import {
     useMutation,
     useQueryClient
 } from "@tanstack/react-query";
-
+import http  from '@/lib/http'
 import { QUERY_KEYS } from "@/actions/queryKeys";
 import * as ACTION from "@/actions/apis/products" ;
-import {http} from "../../config/axiosClient";
 import {NewsAPI} from "@/actions/apis/services";
 
 
@@ -29,9 +28,13 @@ import {NewsAPI} from "@/actions/apis/services";
      return useQuery({
          queryKey: [QUERY_KEYS.PRODUCT__GET_ALL],
          queryFn: async() =>{
-             const url =  `${process.env.NEXT_PUBLIC_API_BACKEND!}/product/get-list`
-             const data = (await(await fetch(url)).json());
-             return data? data?.data : []
+            //  const url =  `${process.env.NEXT_PUBLIC_API_BACKEND!}product/get-list`
+            //  const data = (await(await http.get(url)).json());
+            
+            //  return data? data?.data : []
+       
+          const data = await http.get('product/get-list');
+          return []
          }
      })
 

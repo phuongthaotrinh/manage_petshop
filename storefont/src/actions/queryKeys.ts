@@ -41,11 +41,11 @@ export enum QUERY_KEYS {
     BRANDS_DELETE = "brands/delete",
 
     //CATEGORIES
-    CATEGORIES_CREATE = "brands/create",
-    CATEGORIES_GET_ALL="brands/getAllBrands",
-    CATEGORIES_GET_DETAIL="brands/getDetailBrand",
-    CATEGORIES_UPDATE = "brands/update",
-    CATEGORIES_DELETE = "brands/delete",
+    CATEGORIES_CREATE = "categories/create",
+    CATEGORIES_GET_ALL="categories/getAllBrands",
+    CATEGORIES_GET_DETAIL="categories/getDetailBrand",
+    CATEGORIES_UPDATE = "categories/update",
+    CATEGORIES_DELETE = "categories/delete",
 
     //COMBO_SERVICE
     SERVICES_COMBO__CREATE="comboService/create",

@@ -14,7 +14,7 @@ export default function AdminLayout({children}:{children:React.ReactNode}) {
                 </>
             ):(
                 <HeaderAdmin>
-                    {children}
+                        {children}
                 </HeaderAdmin>
             )}
 

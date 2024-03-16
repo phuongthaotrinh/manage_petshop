@@ -62,6 +62,10 @@ const customerSchema = new mongoose.Schema({
         type: String,
         enum: Object.values(customerStatus),
         default: customerStatus.ACTIVE
+    },
+    employmentStatus:{
+        type: Boolean,
+        default: false
     }
 },{
     timestamps: true,

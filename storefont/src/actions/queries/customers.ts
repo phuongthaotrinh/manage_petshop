@@ -1,4 +1,4 @@
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useMutation} from "@tanstack/react-query";
 import {QUERY_KEYS} from "@/actions/queryKeys";
 import * as ACTION from "@/actions/apis/customers";
 
@@ -9,3 +9,11 @@ export const useGetCustomers= () => {
 
     });
 };
+
+
+export const useManualLogin = () => {
+    return useMutation({
+        mutationKey: ['login'],
+        mutationFn: (payload:any) => ACTION.signInManual(payload),
+    })
+}

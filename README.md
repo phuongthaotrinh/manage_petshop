@@ -24,6 +24,24 @@
 - Bán hàng
   
 ## Images
+> Client
+>> Cart
+ - Trang giỏ hàng
+   ![image](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/6f63e36f-0ae7-4f7b-967a-e14ceb990ba8)
+ - Trang checkout
+   ![checkput](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/4005c8ea-255b-4767-a47d-068f52d6ab5a)
+  
+  - Chọn phương thức thanh toán
+    ![image](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/3f5caeba-c8a8-43a2-926e-2efca846c99f)
+
+  - Trang hiển thị kết quả order thành công
+    ![image](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/76bd7687-fab0-4f75-ba46-f3a073b8cd27)
+
+  - Trang hiển thị kết quả order thất bại
+    ![image](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/712cc35d-079b-4bfa-9be5-f4f640a7cc3d)
+
+
+
  > Admin
 >> PET
 - Trang quản lý pet
