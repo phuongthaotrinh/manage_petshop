@@ -60,70 +60,84 @@ export const createNewCategories = async (payload) => {
         ...payload,
         slug: slugify(payload.name),
     });
-    //
-    // await redisClient.del('all-categories')
-    // await redisClient.set(`category:${newCategory._id}`, JSON.stringify(newCategory));
-    // const newList = await getAllCategoriesV2();
-    // await redisClient.set('all-categories', JSON.stringify(newList));
+   
+    const existList = await redisClient.exists("all-categories");
+    
+    if(!existList) {
+        await getAllCategoriesV2();
+    }else{
+    
+        if(!payload.parent) {
+            await redisClient.RPUSH("all-categories", JSON.stringify(newCategory))
+        }else{
+            await redisClient.del("all-categories").then(async() => {
+                await getAllCategoriesV2();
+          })
+        }
+    }
+
+    await redisClient.set(`category:${newCategory._id}`, JSON.stringify(newCategory))
+
     return  newCategory
 
 };
 
 
-
 export const getAllCategoriesV2 = async () => {
     try {
-        // const redisData = await redisClient.get("all-categories");
-        // const allKeys = await redisClient.keys("*");
-        //
-        // if(redisData) {
-        //     return {
-        //         data: JSON.parse(redisData),
-        //         allKeys
-        //     }
-        //
-        // }else{
-            const categoriesWithoutParent = await CategoriesModel.find({ parent: { $exists: false } });
-
-        const categoriesData = [];
-
-            for (const category of categoriesWithoutParent) {
-                const categoryObj = await getCategoryHierarchy(category);
-                categoriesData.push(categoryObj);
+        const existData = await redisClient.exists('all-categories');
+        
+        if(existData) {
+            const allCategories = await redisClient.LRANGE("all-categories", 0, -1);
+            const decodedCategories = allCategories.map(JSON.parse);
+            return {
+                data: decodedCategories
             }
+        
+        }else{
+            const categoriesWithoutParent = await CategoriesModel.find({ parent: { $exists: false } });
+            const categoriesData = [];
+                for (const category of categoriesWithoutParent) {
+                    const categoryObj = await getCategoryHierarchy(category);
+                    categoriesData.push(categoryObj);
+                }
+                
 
-            // await redisClient.set("all-categories", JSON.stringify(categoriesData));
+                for (const category of categoriesData) {
+                    await redisClient.LPUSH("all-categories", JSON.stringify(category));
+                }
 
+                return categoriesData
 
-            //test sendmailHere
-
-            return categoriesData
-
-        // }
+            }
 
     } catch (error) {
         throw error;
     }
 };
 
-
-
-export const getDetailCategory = async (id, data) => {
+export const getDetailCategory = async (id) => {
     try {
-        // const redisData = await redisClient.get("all-categories");
-        //
-        // if (redisData) {
-        //     const categories = JSON.parse(redisData);
-        //     const category = findCategoryById(id, categories);
-        //     if (category) {
-        //         return category;
-        //     }
-        // }
-
-        const allData = data || await getAllCategoriesV2();
-        const category = findCategoryById(id, allData);
-        return category;
+       const existCate = await redisClient.get(`category:${id}`);      
+       if(existCate){
+            return JSON.parse(existCate)
+       }
+       else
+       {
+            const {data} = await getAllCategoriesV2()
+             const cate =  findCategoryById(id,data);
+        
+            if(cate) {
+               await redisClient.set(`category:${id}`, JSON.stringify(cate))
+                return cate 
+            }else{
+                return null
+            }
+            
+       }
+       
     } catch (error) {
+        console.log("error",error)
         throw error;
     }
 };
@@ -138,15 +152,36 @@ export const updateCategory = async (payload) => {
     return data
 
 }
+const handleDelete = async(id) => {
+    const existedClass = await CategoriesModel.findOne({ _id: id }).populate('totalProduct');
+
+    if (!existedClass) throw createHttpError.NotFound('Cannot find categories to delete');
+
+    if (existedClass.totalProduct > 0){
+        throw createHttpError.Conflict('Cannot delete category due to there are category in this product !')
+    }else{
+        await CategoriesModel.deleteOne({ _id: id })
+        return {
+            message: 'Category has been permanently deleted',
+            statusCode: 200
+        }
+    }
+}
 
 export const deleteCategory = async (id) => {
-    const existedClass = await CategoriesModel.findOne({ _id: id }).populate('totalProduct')
-    if (!existedClass) throw createHttpError.NotFound('Cannot find class to delete')
-    if (existedClass.totalProduct > 0)
-        throw createHttpError.Conflict('Cannot delete category due to there are category in this product !')
-    await CategoriesModel.deleteOne({ _id: id })
-    return {
-        message: 'Category has been permanently deleted',
-        statusCode: 200
+    try {
+        const existRedisCate = await redisClient.get(`category:${id}`);      
+    
+    if(!existRedisCate) {
+        return await handleDelete(id)
+    }else{
+        await redisClient.del(`category:${id}`);
+        await redisClient.del("all-categories");
+        await handleDelete(id);
+        await getAllCategoriesV2();
     }
+    } catch (error) {
+        console.log("error",error)
+    }
+
 }

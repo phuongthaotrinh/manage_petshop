@@ -48,7 +48,7 @@ export async function createNewCategory(payload:BrandCreate) {
 
 export async function getAllCategories():Promise<any[]> {
     const {data} = await http.get(apiUrl.CATEGORIES_GET_ALL);
-    return data.data ? data.data : []
+    return data?.data ? data?.data?.data : []
 }
 
 export async function updateCategory(payload:any) {

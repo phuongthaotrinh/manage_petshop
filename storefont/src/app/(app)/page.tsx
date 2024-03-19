@@ -1,8 +1,3 @@
-
-
-import {useEffect, useState} from 'react';
-import {AnimatePresence} from 'framer-motion';
-// import {Preloader} from "@/components/common/preloader";
 import {Landing} from "@/components/home/landing";
 import {RowSection} from "@/components/home/row-section";
 import {navigationConfig} from "@/constants/navigation";

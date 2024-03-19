@@ -54,7 +54,7 @@ export default function Signin() {
     try {
         const result = await authApiRequest.login(values);
         const res = await authApiRequest.auth({ accessToken: result.payload.accessToken , role: result.payload.user.role});
-        toast.sucess('login suceess, wait 3s....')
+        // toast.sucess('login suceess, wait 3s....')
 
         if(res.payload) {
             if(["Customers","Guest"].includes(res.payload?.role))  router.push('/')

@@ -2,7 +2,7 @@ import * as z from "zod";
 import {toast} from "react-hot-toast";
 import axios, {AxiosError} from "axios";
 import {UseFormReturn} from "react-hook-form";
-
+import {CategoryItem} from "@/types/products"
 export function formatDate(date: Date | string | number) {
     if (date) {
         return new Intl.DateTimeFormat("vi-VN", {
@@ -127,4 +127,34 @@ export const calcShippingFee = (userPrice: number) => {
         needMore: b <= 0 ? 0 : formatPrice(b),
         percent: `${a}%`
     };
+}
+
+
+export function findParentAndCheckChildren(data: CategoryItem[] | null, idToFind: string | null): { parents: CategoryItem[],parentNames:string, hasChildren: boolean } {
+    if (!data || !Array.isArray(data) || data.length === 0 || !idToFind) {
+        return { parents: [], hasChildren: false, parentNames: '' };
+    }
+    let parentNames: string[] = [];
+    let parents: CategoryItem[] = [];
+    let hasChildren = false;
+
+    function findParentHelper(items: CategoryItem[]): boolean {
+        for (const item of items) {
+            if (item._id === idToFind) {
+                hasChildren = item.children.length > 0;
+                return true;
+            }
+            if (item.children.length > 0) {
+                if (findParentHelper(item.children)) {
+                    parents.push(item);
+                    parentNames.push(item.name);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    findParentHelper(data);
+    return { parents, hasChildren, parentNames: parentNames.join(' / ') };
 }

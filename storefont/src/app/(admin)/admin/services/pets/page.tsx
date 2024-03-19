@@ -5,8 +5,9 @@ import * as React from "react";
 import {PetsWeightBtn} from "@/components/admin/services/pets-weight-btn";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-export default async function PetPages() {
+import http from "@/lib/http";
 
+export default  function PetPages() {
     return (
         <>
             <Shell variant="sidebar" as="div">
@@ -26,9 +27,8 @@ export default async function PetPages() {
                         </Button>
                     </div>
                 </PageHeaderShell>
-                {/*<HydrationBoundary state={dehydrate(queryClient)}>*/}
-                    <PetsShell />
-                {/*</HydrationBoundary>*/}
+    
+                    <PetsShell  />
             </Shell>
             
         </>

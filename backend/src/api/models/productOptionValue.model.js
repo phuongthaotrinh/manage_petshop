@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import {productStatus} from "../../constants/product"
 
 const productOptionValueSchema = new mongoose.Schema({
-    value: {tye: String},
+    value: {type: String},
     product_option_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductOption',

@@ -20,6 +20,7 @@ import Link from "next/link";
 
 
 export function UserNav() {
+    
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -60,7 +61,7 @@ export function UserNav() {
 
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => console.log("logout")}>
                     Log out
                     <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>

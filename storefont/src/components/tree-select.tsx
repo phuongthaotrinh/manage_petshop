@@ -165,7 +165,7 @@ const TreeItem = React.forwardRef<
                 <li>
                     <Leaf
                         item={data}
-                        isSelected={selectedItemId === data.id}
+                        isSelected={selectedItemId === data._id}
                         onClick={() => handleSelectChange(data)}
                         Icon={ItemIcon}
                     />

@@ -37,7 +37,7 @@ export default function BrandCreateOrUpdate(){
 
     const [parentSelected, setParentSelected] = React.useState<any>();
     const router = useRouter();
-
+    console.log("id", id)
 
 
 

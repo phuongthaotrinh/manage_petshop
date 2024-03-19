@@ -53,14 +53,14 @@ export const signInAccount = useCatchAsync(async (req, res) => {
         maxAge: 60 * 60 * 1000 * 24,
         httpOnly: true,
         // secure: true,
-        sameSite: 'Lax' // hoặc 'Strict'
+        sameSite: 'Lax' // or 'Strict'
     })
 
     res.cookie('uid', user?._id, {
         maxAge: 60 * 60 * 1000 * 24 * 30,
         httpOnly: false,
         // secure: true,
-        sameSite: 'Lax' // hoặc 'Strict'
+        sameSite: 'Lax' // or 'Strict'
     })
 
     return res.status(HttpStatusCode.CREATED).json({
@@ -72,3 +72,33 @@ export const signInAccount = useCatchAsync(async (req, res) => {
 
 })
 
+export const signout = useCatchAsync(async (req, res) => {
+	const userRedisTokenKeys = {
+		accessToken: AuthRedisKeyPrefix.ACCESS_TOKEN + req.profile._id,
+		refreshToken: AuthRedisKeyPrefix.REFRESH_TOKEN + req.profile._id
+	}
+	const accessToken = await redisClient.get(userRedisTokenKeys.accessToken)
+
+	if (!accessToken)
+		return res.status(400).json({
+			message: 'Failed to revoke token',
+			statusCode: 400
+		})
+	// Delete user's access & refresh token in Redis
+	await Promise.all([
+		redisClient.del(userRedisTokenKeys.accessToken),
+		redisClient.del(userRedisTokenKeys.refreshToken)
+	])
+	// Reset all client's cookies
+	req.logout((err) => {
+		if (err) throw err
+	})
+	res.clearCookie('access_token')
+	res.clearCookie('uid')
+	res.clearCookie('connect.sid', { path: '/' })
+
+	return res.status(202).json({
+		message: 'Signed out!',
+		statusCode: 202
+	})
+})

@@ -7,10 +7,7 @@ const productVariantSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
     },
-    product_option_id:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ProductOption',
-    },
+    data:[Array],
     title:{  type:String,  required: true  },
     sku:{type:String},
     barcode:{type:String},
@@ -22,8 +19,8 @@ const productVariantSchema = new mongoose.Schema({
     length: {type:String},
     height: {type:String},
     width: {type:String},
-    variant_rank:{type: Number},
     metadata:{type:JSON},
+    price:{type:Number}
 
 }, {
     collection: 'product_variant',

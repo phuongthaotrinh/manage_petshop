@@ -14,8 +14,8 @@ import {MoreVertical, Trash} from "lucide-react";
 import * as React from "react";
 import {FileEdit} from 'lucide-react';
 
-interface ITableAddProductVariant {
-    data:FormItems['productVariants'],
+interface ITableAddProductVariant{
+    data:FormItems['productVariants'] ,
     setPdAttrOpen:React.Dispatch<React.SetStateAction<boolean>>,
     setDataCreateEdit:(value:any) => void
 }
@@ -30,6 +30,7 @@ export function TableAddProductVariant ({data,setPdAttrOpen, setDataCreateEdit}:
                             <TableRow>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Price</TableHead>
+                                <TableHead>Variant</TableHead>
                                 <TableHead>Inventory</TableHead>
                                 <TableHead></TableHead>
                             </TableRow>
@@ -39,6 +40,9 @@ export function TableAddProductVariant ({data,setPdAttrOpen, setDataCreateEdit}:
                                 <TableRow key={j}>
                                     <TableCell className="font-medium">{i?.title || ""}</TableCell>
                                     <TableCell className="font-medium">{i?.price || ""}</TableCell>
+                                    <TableCell className="font-medium">
+                                        {(i?.data && i?.data as any[])?.[0]?.variant_data}/${(i?.data && i?.data as any[])?.[1]?.variant_data}
+                                    </TableCell>
                                     <TableCell className="font-medium">{i?.inventory_quantity}</TableCell>
                                     <TableCell>
                                         <DropdownMenu>

@@ -11,24 +11,10 @@ import mongoose from "mongoose";
 export async function createProduct(draftProduct) {
     try {
         // 1. Lưu thông tin Product
-        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize}
-        const product = await Product.create(product_info);
+            const isHasVariant = draftProduct.variants.length > 0
+        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize, isHasVariant:isHasVariant, price:draftProduct.price, inventory_quantity: draftProduct.inventory_quantity};
 
-
-        // 2. Lưu thông tin Image
-        // const galleries = draftProduct.galleries;
-        // if (galleries) {
-        //     const images = await Images.create(galleries);
-        //
-        //     // 3. Lưu thông tin ProductImage
-        //     for (const image of images) {
-        //         const productImage = new ProductImage({
-        //             product_id: product._id,
-        //             image_id: image._id
-        //         });
-        //         await productImage.save();
-        //     }
-        // }
+        const product = await Product.create(product_info)
 
         // 4. Lưu thông tin ProductOption
         const variants = draftProduct.variants;
@@ -47,7 +33,6 @@ export async function createProduct(draftProduct) {
                         const productVariantData = new ProductVariant({
                             ...productVariant,
                             product_id: product._id,
-                            product_option_id: productOption._id,
                         });
                         await productVariantData.save();
                     }
@@ -94,6 +79,7 @@ export async function getListProduct () {
                foreignField: '_id',
                as: 'categories'
        })
+
   return data
 }
 
@@ -133,16 +119,10 @@ export async function getDetailProduct({id}) {
         })
 
 
-    const productVariant = await ProductVariant.aggregate()
-        .match({
-            product_id:new mongoose.Types.ObjectId(id)
-        })
-        .lookup({
-            from: 'product_option',
-            foreignField: '_id',
-            localField: 'product_option_id',
-            as: 'product_option'
-        })
+    const productVariant = await ProductVariant.find({
+        product_id: id
+    })
+
 
 
     const newData = {...productInfo[0], images:productImages,productVariant:productVariant}

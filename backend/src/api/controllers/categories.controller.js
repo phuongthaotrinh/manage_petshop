@@ -27,12 +27,9 @@ export const createNewCategories = useCatchAsync(async (req, res) => {
 // [GET] /api/brands/get-all-brand
 export const getAllCategoriesV2 = useCatchAsync(async (req, res) => {
     try {
-
-        const data = await CategorisService.getAllCategoriesV2();
-
+        const  data= await CategorisService.getAllCategoriesV2();
         return res.status(HttpStatusCode.OK).json({
-            data: data,
-            cookie:req.headers
+            data: data
         });
     } catch (error) {
         return res.status(error.status || HttpStatusCode.INTERNAL_SERVER_ERROR).json({
@@ -81,5 +78,5 @@ export const removeClass = useCatchAsync(async (req, res) => {
     const id = req.params.id
     if (!id) throw createHttpError(HttpStatusCode.NO_CONTENT)
     const result = await CategorisService.deleteCategory(id)
-    return res.status(result.statusCode).json(result)
+    return res.status(HttpStatusCode.OK).json(result)
 })

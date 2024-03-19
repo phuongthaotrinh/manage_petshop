@@ -15,3 +15,13 @@ export interface ProductAttribute extends ShareResponse {
     status: boolean,
     attributes:Attribute[]
 }
+
+
+export interface CategoryItem {
+    _id: string;
+    name: string;
+    slug: string;
+    status: boolean;
+    images: string[];
+    children: CategoryItem[];
+}

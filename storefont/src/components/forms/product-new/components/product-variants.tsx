@@ -19,6 +19,16 @@ import {useForm} from "react-hook-form";
 import {FormItems} from "@/components/forms/product-new";
 import {TableAddProductVariant} from "@/components/forms/product-new/components/table-addProductVariant";
 import {setValuesOfForm} from "@/lib/helpers";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+
+
 
 function convertDataVariables(input:any) {
     const dataVariables = {};
@@ -43,7 +53,6 @@ type IProductVariants = {
     formData:FormItems
 };
 
-
 export function ProductVariants ({formData,updateForm}:IProductVariants) {
     const [pdAttrOpen, setPdAttrOpen] = React.useState(false);
     const [dataCreateEdit, setDataCreateEdit] = React.useState<FormItems['productVariants'] | null>(null);
@@ -52,11 +61,11 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
 
     const hanldePrdVariantSubmit = (values:any) => {
         const outputData = convertDataVariables(values);
-        console.log("outputData", outputData)
         setPdAttrOpen(false);
         //@ts-ignore
         updateForm({ productVariants:[...formData.productVariants, outputData]})
         variantForm.reset();
+
         console.log("values", values)
     }
 
@@ -66,7 +75,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
         }
     },[dataCreateEdit])
 
-
+    console.log("dataCreateEdit", dataCreateEdit)
     return (
         <>
             {formData.variants?.length >= 1 ? (
@@ -98,7 +107,8 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                 <Form {...variantForm}>
                                     <form onSubmit={variantForm.handleSubmit(hanldePrdVariantSubmit)}>
                                         <div className="space-y-5">
-                                            <Accordion type="multiple" className="w-full space-y-5">
+                                            <Accordion type="multiple" className="w-full space-y-5"
+                                                       defaultValue={["product_attributes","product_attribute_option","product_attribute_option_setting","stock_n_inventory"]}>
                                                 <div className="p-2">
                                                     <AccordionItem value="product_attributes">
                                                         <AccordionTrigger>
@@ -311,7 +321,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                                     autoFocus
                                                                                     type="text"
                                                                                     className="w-full"
-                                                                                    required
+
                                                                                     {...field}
                                                                                     value={field.value || ""}
                                                                                     placeholder="SUN-G, JK1234..."
@@ -332,7 +342,6 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                                     autoFocus
                                                                                     type="text"
                                                                                     className="w-full"
-                                                                                    required
                                                                                     {...field}
                                                                                     value={field.value || ""}
                                                                                     placeholder="SUN-G, JK1234..."
@@ -353,7 +362,6 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                                     autoFocus
                                                                                     type="text"
                                                                                     className="w-full"
-                                                                                    required
                                                                                     {...field}
                                                                                     value={field.value || ""}
                                                                                     placeholder="123456789104..."
@@ -371,6 +379,8 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
 
                                                 </div>
                                             </Accordion>
+
+
                                         </div>
 
                                         <div className={"flex gap-3 items-center my-5"}>
@@ -390,7 +400,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                             </DialogHeader>
                         </DialogContent>
                     </Dialog>
-                    <TableAddProductVariant data={formData.productVariants} setPdAttrOpen={setPdAttrOpen} setDataCreateEdit={setDataCreateEdit}/>
+                    <TableAddProductVariant data={formData.productVariants} setPdAttrOpen={setPdAttrOpen} setDataCreateEdit={setDataCreateEdit} />
                 </div>
             ):(
                 <div id="content2" className="my-5 space-y-5">
