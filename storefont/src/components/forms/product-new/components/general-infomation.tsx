@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Switch} from "@/components/ui/switch";
 import React from "react";
-import {type FormItems} from "@/components/forms/product-new";
+import {type FormItems} from "@/components/forms/product-new/index2";
 
 
 type IGeneralInfomation = {

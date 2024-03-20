@@ -17,11 +17,12 @@ export default function ProductLayout({children}:{children: React.ReactNode}) {
                     {children}
                 </>
             ):(
-                <HorizontalMenu sideNav={<SidebarNav items={navigationConfig.adminProductNCate} className=""  type="product"/>}>
-                    <AnimatePresence mode="wait">
-                        {children}
-                    </AnimatePresence>
-                </HorizontalMenu>
+                // <HorizontalMenu sideNav={<SidebarNav items={navigationConfig.adminProductNCate} className=""  type="product"/>}>
+                //     <AnimatePresence mode="wait">
+                //         {children}
+                //     </AnimatePresence>
+                // </HorizontalMenu>
+                <>{children}</>
             )}
         </>
     )

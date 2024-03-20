@@ -23,7 +23,7 @@ export default async function Home() {
                     </div>
                 </RowSection>
                 <div className="pt-20">
-                    <FeaturedProduct data={[]} isPending={false} isError={false}/>
+                    <FeaturedProduct />
                 </div>
                <div id="#booking">
                    <RowSection title="Dịch vụ" perView={3} spacing={80}>

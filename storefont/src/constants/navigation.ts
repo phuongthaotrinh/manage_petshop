@@ -153,7 +153,12 @@ export const navigationConfig: NavbarConfig = {
             title: "Services",
             href: "/admin/services",
             items: [],
-        }
+        },
+        // {
+        //     title: "Discount",
+        //     href: "/admin/discount",
+        //     items: [],
+        // }
     ],
     adminStoreMenu: [
         {

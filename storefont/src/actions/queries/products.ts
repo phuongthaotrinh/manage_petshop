@@ -28,13 +28,8 @@ import {NewsAPI} from "@/actions/apis/services";
      return useQuery({
          queryKey: [QUERY_KEYS.PRODUCT__GET_ALL],
          queryFn: async() =>{
-            //  const url =  `${process.env.NEXT_PUBLIC_API_BACKEND!}product/get-list`
-            //  const data = (await(await http.get(url)).json());
-            
-            //  return data? data?.data : []
-       
-          const data = await http.get('product/get-list');
-          return []
+          const {payload} = await http.get('product/get-list') as any;
+             return payload?.data ? payload?.data: []
          }
      })
 

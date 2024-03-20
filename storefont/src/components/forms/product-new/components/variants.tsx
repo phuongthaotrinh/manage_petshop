@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Switch} from "@/components/ui/switch";
 import React, { forwardRef, useRef } from "react";
-import {type FormItems, initialValues} from "@/components/forms/product-new";
+import {type FormItems, initialValues} from "@/components/forms/product-new/index2";
 import {Controller, useFieldArray, useForm} from "react-hook-form";
 import MultipleSelector, {MultipleSelectorRef, Option} from "@/components/common/multi-select/fancy-multi-and-combobox";
 import {Button} from "@/components/ui/button";
