@@ -13,8 +13,8 @@ redisClient
         console.log('[ERROR] ::: ', error.message)
     })
 
-redisClient.on('error', (error) => {
-    console.log(error.message)
-})
+// redisClient.on('error', (error) => {
+//     console.log(error.message)
+// })
 
 export default redisClient

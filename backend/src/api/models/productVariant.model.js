@@ -7,7 +7,10 @@ const productVariantSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
     },
-    data:[Array],
+    product_variant_option_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductVariantOption',
+    },
     title:{  type:String,  required: true  },
     sku:{type:String},
     barcode:{type:String},
