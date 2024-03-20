@@ -16,6 +16,9 @@ const productSchema = new mongoose.Schema({
     weight:{type: String},
     length:{type: String},
     metadata:{type: JSON},
+    price:{type:Number},
+    inventory_quantity:{type: Number},
+    isHasVariant:{type:Boolean, default: false},
     tags:[
         {
             value: String,
@@ -25,14 +28,13 @@ const productSchema = new mongoose.Schema({
     brand_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Brands',
-
     },
-    category_ids: [
+    category_ids:
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Categories',
         }
-    ],
+    ,
 
 
 }, {
@@ -43,6 +45,14 @@ const productSchema = new mongoose.Schema({
     toObject: { virtuals: true, transform: true }
 })
 
+// productSchema.virtual('totalVariant', {
+//     localField: '_id',
+//     foreignField: 'product_id',
+//     ref: 'ProductVariant',
+//     count: true,
+//     justOne: false,
+//     options: { lean: true },
+// })
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;

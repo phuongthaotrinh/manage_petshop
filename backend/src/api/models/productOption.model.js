@@ -11,9 +11,14 @@ const productOptionSchema = new mongoose.Schema({
         type: String,
         trim:true
     },
+    value:{
+        type: String,
+        trim:true
+    },
     metadata:{
         type: JSON
-    }
+    },
+
 }, {
     collection: 'product_option',
     timestamps: true,

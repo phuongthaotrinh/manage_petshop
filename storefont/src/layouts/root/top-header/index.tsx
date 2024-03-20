@@ -5,12 +5,12 @@ import {CartHeader} from "@/layouts/root/top-header/components/cart";
 export default function TopHeader() {
     return (
         <div className="relative  z-[99] w-full flex justify-end p-">
-            {/*<div className="px-2 flex items-center gap-x-4">*/}
-            {/*    <UserNav/>*/}
-            {/*    <SearchHeader/>*/}
-            {/*    <CartHeader/>*/}
+            <div className="px-2 flex items-center gap-x-4">
+             <UserNav/>
+             <SearchHeader/>
+              <CartHeader/>
 
-            {/*</div>*/}
+            </div>
         </div>
     )
 }

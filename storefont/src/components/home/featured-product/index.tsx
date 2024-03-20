@@ -9,7 +9,10 @@ import {clsx} from "clsx"
 
 
 export function FeaturedProduct() {
-    const {data, isPending, isError} = useGetListProduct();
+     const {data, isPending, isError} = useGetListProduct();
+
+
+
     const dataLenght = data?.length;
     if(data)
         return (

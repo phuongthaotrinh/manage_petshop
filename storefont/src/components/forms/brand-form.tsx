@@ -12,20 +12,26 @@ import * as React from "react";
 import {Textarea} from "@/components/ui/textarea";
 import {Uploads} from "@/components/common/uploads";
 import {RenderImage} from "@/components/common/render-image";
+import {PawPrint} from "lucide-react";
+import {Tree} from "@/components/tree-select";
+import {data} from "@/components/sub_category_template";
+import {useGetCategories} from "@/actions/queries/brand&categories";
 
 interface BrandFormsProps {
     form: UseFormReturn<brandValidType> | any,
     onSubmit:(values:brandValidType) => void,
     images:string[],
-    setImages:any
+    setImages?:any
 }
 
 
 export function BrandForms ({form , onSubmit, images, setImages}:BrandFormsProps) {
-        return (
+
+    return (
             <>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
                         <FormField
                             control={form.control}
                             name="images"
@@ -94,7 +100,6 @@ export function BrandForms ({form , onSubmit, images, setImages}:BrandFormsProps
                                 </FormItem>
                             )}
                         />
-
                         <Button type="submit">Submit</Button>
                     </form>
                 </Form>

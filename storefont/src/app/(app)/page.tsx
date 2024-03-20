@@ -1,8 +1,3 @@
-'use client';
-
-import {useEffect, useState} from 'react';
-import {AnimatePresence} from 'framer-motion';
-// import {Preloader} from "@/components/common/preloader";
 import {Landing} from "@/components/home/landing";
 import {RowSection} from "@/components/home/row-section";
 import {navigationConfig} from "@/constants/navigation";
@@ -10,29 +5,10 @@ import {ServiceCard} from "@/components/card/service-card";
 import {Service2Card} from "@/components/card/service-2-card";
 import {Booking} from "@/components/home/booking";
 import {FeaturedProduct} from "@/components/home/featured-product";
+import { cookies } from 'next/headers'
+import http from '@/lib/http'
 
-let initPage = 0
-export default function Home() {
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        (
-            async () => {
-                const LocomotiveScroll = (await import('locomotive-scroll')).default
-                const locomotiveScroll = new LocomotiveScroll();
-                setTimeout(() => {
-                    setIsLoading(false);
-                    document.body.style.cursor = 'default'
-                    window.scrollTo(0, 0);
-                }, 2000)
-            }
-        )();
-        initPage ++
-    }, []);
-
-
-
-
+export default async function Home() {
 
     return (
         <main>
@@ -47,7 +23,7 @@ export default function Home() {
                     </div>
                 </RowSection>
                 <div className="pt-20">
-                    <FeaturedProduct/>
+                    <FeaturedProduct />
                 </div>
                <div id="#booking">
                    <RowSection title="Dịch vụ" perView={3} spacing={80}>

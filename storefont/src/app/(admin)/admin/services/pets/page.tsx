@@ -5,15 +5,9 @@ import * as React from "react";
 import {PetsWeightBtn} from "@/components/admin/services/pets-weight-btn";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import {MoveLeft} from "lucide-react";
-import {useGetPets} from "@/actions/queries/services";
-import {
-    dehydrate,
-    HydrationBoundary,
-    QueryClient,
-} from "@tanstack/react-query";
-export default async function PetPages() {
+import http from "@/lib/http";
 
+export default  function PetPages() {
     return (
         <>
             <Shell variant="sidebar" as="div">
@@ -26,16 +20,15 @@ export default async function PetPages() {
                     </PageHeader>
                     <div className="flex items-center justify-end gap-3">
                         <PetsWeightBtn />
-                        <Button variant="outline">
+                        <Button variant="link">
                             <Link href="/admin/services" className="flex items-center gap-3">
-                                <MoveLeft className="flex items-center mr-2"/>Back
+                               Back
                             </Link>
                         </Button>
                     </div>
                 </PageHeaderShell>
-                {/*<HydrationBoundary state={dehydrate(queryClient)}>*/}
-                    <PetsShell />
-                {/*</HydrationBoundary>*/}
+    
+                    <PetsShell  />
             </Shell>
             
         </>

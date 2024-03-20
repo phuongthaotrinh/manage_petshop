@@ -12,7 +12,12 @@ const nextConfig = {
             "petshop.fringestudio.com"
         ]
     },
-    output: "standalone"
+    output: "standalone",
+    logging: {
+        fetches: {
+          fullUrl: true
+        }
+      }
 }
 
 module.exports = nextConfig

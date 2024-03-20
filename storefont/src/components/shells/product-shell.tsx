@@ -24,7 +24,8 @@ interface ProductsTableShellProps {
 
 export function ProductTableShell({mode}:ProductsTableShellProps ) {
     const {data: raw, isPending:_,isError} = useGetListProduct();
-    const {data: brands, isPending:brandSpin} = useGetBrands()
+
+
     const data = React.useMemo(() => {
         return raw?.filter((i:any) => i?.status === mode)
     },[raw,mode])
@@ -167,7 +168,7 @@ export function ProductTableShell({mode}:ProductsTableShellProps ) {
 
     return (
         <>
-            {data && !brandSpin && (
+            {data && (
                 <DataTableRaw
                     showToolbar={true}
                     columns={columns}

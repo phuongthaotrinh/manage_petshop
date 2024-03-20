@@ -1,7 +1,7 @@
 'use client';
 
-import {Label} from "@/components/ui/label";
-import React, {useState} from "react";
+
+import React from "react";
 import {type FormItems} from "@/components/forms/product-new";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
@@ -9,8 +9,18 @@ import {CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/components/ui/command";
 import {cn} from "@/lib/utils";
 import MultipleSelector from "@/components/common/multi-select/fancy-multi-and-combobox";
-import {Brands} from "@/types/brand";
-import * as APIService from "@/actions/apis/brand&categories";
+import {useGetBrands, useGetCategories} from "@/actions/queries/brand&categories";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label"
+import {Tree, TreeDataItem} from "@/components/tree-select";
+import {findParentAndCheckChildren} from "@/lib/helpers";
+import {CategoryItem} from "@/types/products";
 
 
 type IGeneralInfomation = {
@@ -22,17 +32,29 @@ type IGeneralInfomation = {
 
 
 export function Organize ({updateForm,formData,setOpen, open}:IGeneralInfomation) {
-    const [brands, setBrands] = useState<Brands[]>([]);
-    const [categories, setCategories] = useState<any[]>([])
+    const {data:categories} = useGetCategories();
+    const {data:brands} = useGetBrands();
+    const [openCate, setOpenCate] = React.useState(false);
+    const [choose, setChoose] = React.useState<TreeDataItem | undefined>(undefined);
+    const [step, setStep] = React.useState<CategoryItem[]>([]);
+    const [name, setName] = React.useState<string>("");
+    const [hasChildren, setHasChildren] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
-        (async () => {
-            Promise.all([APIService.getAllBrands(), APIService.getAllCategories()]).then((data: any) => {
-                setBrands(data[0]);
-                setCategories(data[1])
-            })
-        })()
-    }, [])
+    const close = () => {
+        setOpenCate(false);
+        setName("")
+    }
+
+    React.useMemo(() => {
+        const {parents, hasChildren, parentNames} = findParentAndCheckChildren(categories!,choose?._id!);
+        setHasChildren(hasChildren);
+        setStep(parents);
+        const res  = (choose && parentNames.length > 0) ? `${parentNames}/${choose?.name}` : !choose ? "" :`${choose?.name}`
+        setName(res)
+    },[choose,categories])
+
+    console.log("choose", choose)
+
     return (
         <>
             <div id="content2" className="my-5 space-y-5">
@@ -93,25 +115,42 @@ export function Organize ({updateForm,formData,setOpen, open}:IGeneralInfomation
 
                         {
                             categories && (
-                                <MultipleSelector
-                                    value={formData.organize.category_ids ? formData.organize.category_ids : []}
-                                    onChange={(e) => {
-                                        updateForm({organize: {...formData.organize, category_ids: e}})
-                                    }}
-                                    options={categories?.map((i,j) => {
-                                        return {
-                                            value: i?._id,
-                                            label: i?.name
-                                        }
-                                    })}
-                                    hidePlaceholderWhenSelected
-                                    placeholder="Select categories you like..."
-                                    emptyIndicator={
-                                        <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                                            no results found.
-                                        </p>
-                                    }
-                                />
+                           <>
+                               <div className="w-full border rounded-md h-9 font-medium cursor-pointer" onClick={() => setOpenCate(true)}>
+                                   <div className="h-full pl-2 flex items-center">
+                                       {choose ?  choose?.name :"Choose category"}
+                                   </div>
+                               </div>
+                               <Dialog  open={openCate} onOpenChange={close}>
+                                   <DialogContent className="w-[60vw] min-w-[60vw] min-h-80 h-auto">
+                                       <DialogHeader>
+                                           <Tree data={categories}
+                                                 onSelectChange={(item) =>{
+                                                     setChoose(item);
+                                                     console.log("tree", item)
+                                                 } }
+                                                 className="w-full box-border h-full"
+
+                                           />
+                                       </DialogHeader>
+                                       <DialogDescription className="font-semibold text-dreamOrange">{name} </DialogDescription>
+                                       <DialogFooter>
+                                           <Button type="button" variant="link" className="no-underline" onClick={close}>Cancel</Button>
+                                           <Button type="submit" disabled={hasChildren} variant="orange" onClick={
+                                               () => {
+                                                   updateForm({organize: {...formData.organize, category_ids: choose!?._id}});
+                                                   close()
+
+                                               }
+                                           }>Save</Button>
+                                       </DialogFooter>
+                                   </DialogContent>
+                               </Dialog>
+                           </>
+
+
+
+
                             )
                         }
                     </div>

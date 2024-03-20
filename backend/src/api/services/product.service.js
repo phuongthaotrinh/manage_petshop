@@ -1,34 +1,22 @@
 import createHttpError from "http-errors";
 
 import Product from '../models/product.model';
-import Images from '../models/images.model';
 import ProductImage from '../models/productImages.model';
 import ProductOption from '../models/productOption.model';
-import ProductOptionValue from '../models/productOptionValue.model';
 import ProductVariant from '../models/productVariant.model';
+import ProductVariantOption from "../models/product_variant_option.model";
+
+
+
 import mongoose from "mongoose";
 
 export async function createProduct(draftProduct) {
     try {
         // 1. Lưu thông tin Product
-        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize}
-        const product = await Product.create(product_info);
+            const isHasVariant = draftProduct.variants.length > 0
+        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize, isHasVariant:isHasVariant, price:draftProduct.price, inventory_quantity: draftProduct.inventory_quantity};
 
-
-        // 2. Lưu thông tin Image
-        // const galleries = draftProduct.galleries;
-        // if (galleries) {
-        //     const images = await Images.create(galleries);
-        //
-        //     // 3. Lưu thông tin ProductImage
-        //     for (const image of images) {
-        //         const productImage = new ProductImage({
-        //             product_id: product._id,
-        //             image_id: image._id
-        //         });
-        //         await productImage.save();
-        //     }
-        // }
+        const product = await Product.create(product_info)
 
         // 4. Lưu thông tin ProductOption
         const variants = draftProduct.variants;
@@ -47,7 +35,6 @@ export async function createProduct(draftProduct) {
                         const productVariantData = new ProductVariant({
                             ...productVariant,
                             product_id: product._id,
-                            product_option_id: productOption._id,
                         });
                         await productVariantData.save();
                     }
@@ -76,6 +63,105 @@ export async function createProduct(draftProduct) {
 }
 
 
+export async function createProduct2(draftProduct) {
+    try {
+        // 1. Lưu thông tin Product
+        const isHasVariant = draftProduct.variants.length > 0
+        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize, isHasVariant:isHasVariant, price:draftProduct.price, inventory_quantity: draftProduct.inventory_quantity};
+
+        const product = await Product.create(product_info)
+
+        //save productOption and productOptionValue
+
+        draftProduct.variants.forEach(function(variant) {
+            variant.value.forEach(function(valueObj) {
+                const productOption = new ProductOption({
+                    title: variant.name,
+                    value: valueObj.value,
+                    product_id: product._id
+                });
+                productOption.save();
+            });
+        })
+
+
+        await createProductVariantOptions(draftProduct.productVariants, product._id)
+            .then(productOptionValue => {
+                console.log('ProductVariantOptions created:', ProductOptionValue);
+                createProductVariants(draftProduct.productVariants, productOptionValue,product._id)
+                    .then(productVariantsResult => {
+                        console.log('ProductVariants created:', productVariantsResult);
+                    })
+                    .catch(error => {
+                        console.error('Error creating ProductVariants:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Error creating ProductVariantOptions:', error);
+            });
+
+    } catch (error) {
+        console.error('Error creating product:', error);
+    }
+}
+
+const createProductVariantOptions = async (productVariants, productId) => {
+    const productVariantOptions = [];
+
+    for (const variant of productVariants) {
+        for (const variantData of variant.data) {
+            const foundOption = await ProductOption.findOne({
+                $and:[
+                    {
+                        title:variantData.variant_name
+                    },
+                    {
+                        value:variantData.variant_data
+                    }
+                ]
+            })
+            if (foundOption) {
+                productVariantOptions.push(foundOption);
+            }
+        }
+    }
+
+
+    return await  ProductVariantOption.insertMany({
+        product_option_id: productVariantOptions?.map((i) => i._id),
+        product_id: productId
+    })
+};
+
+
+
+
+const createProductVariants = async (productVariants, productVariantOptions, productId) => {
+    const productVariantsResult = [];
+
+    for (let i = 0; i < productVariants.length; i++) {
+        const variant = productVariants[i];
+        const productVariantOptionId = productVariantOptions[i]._id; // Lấy id của ProductVariantOption tương ứng
+
+        const productVariant = new ProductVariant({
+            title: variant.title,
+            material: variant.material,
+            price: variant.price,
+            sku: variant.sku,
+            inventory_quantity: variant.inventory_quantity,
+            ean: variant.ean,
+            upc: variant.upc,
+            barcode: variant.barcode,
+            product_variant_option_id: productVariantOptionId,
+            product_id: productId
+        });
+
+        const savedProductVariant = await productVariant.save();
+        productVariantsResult.push(savedProductVariant);
+    }
+
+    return productVariantsResult;
+};
 
 export async function getListProduct () {
    const data =  await Product.aggregate()
@@ -83,7 +169,17 @@ export async function getListProduct () {
             from: 'brands',
            localField: 'brand_id',
            foreignField: '_id',
-           as: 'brand'
+           as: 'brand',
+           pipeline:[
+               {
+                   $project:{
+                       name: 1,
+                       _id: 1,
+                       images:1,
+                       slug:1
+                   }
+               }
+           ]
        })
        .addFields({
            brand: { $arrayElemAt: ["$brand", 0] }
@@ -92,8 +188,20 @@ export async function getListProduct () {
             from: 'categories',
                localField: 'category_ids',
                foreignField: '_id',
-               as: 'categories'
-       })
+               as: 'categories',
+           pipeline:[
+               {
+                   $project:{
+                       name: 1,
+                       _id: 1,
+                       images:1,
+                       slug:1
+                   }
+               }
+           ]
+       });
+
+
   return data
 }
 
@@ -109,7 +217,17 @@ export async function getDetailProduct({id}) {
             from: 'brands',
             localField: 'brand_id',
             foreignField: '_id',
-            as: 'brand'
+            as: 'brand',
+            pipeline:[
+                {
+                    $project:{
+                        name: 1,
+                        _id: 1,
+                        images:1,
+                        slug:1
+                    }
+                }
+            ]
         })
         .addFields({
             brand: { $arrayElemAt: ["$brand", 0] }
@@ -118,8 +236,22 @@ export async function getDetailProduct({id}) {
             from: 'categories',
             localField: 'category_ids',
             foreignField: '_id',
-            as: 'categories'
+            as: 'categories',
+            pipeline:[
+                {
+                    $project:{
+                        name: 1,
+                        _id: 1,
+                        images:1,
+                        slug:1
+                    }
+                }
+            ]
         })
+        .addFields({
+            categories: { $arrayElemAt: ["$categories", 0] }
+        })
+
 
     const productImages = await ProductImage.aggregate()
         .match({
@@ -138,14 +270,46 @@ export async function getDetailProduct({id}) {
             product_id:new mongoose.Types.ObjectId(id)
         })
         .lookup({
-            from: 'product_option',
+            from: 'product_variant_option',
             foreignField: '_id',
-            localField: 'product_option_id',
-            as: 'product_option'
+            localField: 'product_variant_option_id',
+            as: 'variant_option'
+        })
+        .addFields({
+            variant_option: { $arrayElemAt: ["$variant_option", 0] }
         })
 
 
-    const newData = {...productInfo[0], images:productImages,productVariant:productVariant}
+
+
+    const options = await ProductOption.aggregate([
+        {
+            $match: {
+                product_id:new mongoose.Types.ObjectId(id)
+            }
+        },
+        {
+            $group: {
+                _id: "$title",
+                data: {
+                    $push: {
+                        value: "$value",
+                        _id: "$_id"
+                    }
+                }
+            }
+        },
+        {
+            $project: {
+                title: "$_id",
+                data: 1,
+                _id: 0
+            }
+        }
+    ])
+
+
+    const newData = {...productInfo[0], images:productImages,productVariant:productVariant,options:options}
 
 
     return newData

@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import {BookingForm} from "@/components/forms/booking-form";
 import {formSchema, IBooking, initialValue} from "@/validations/booking";

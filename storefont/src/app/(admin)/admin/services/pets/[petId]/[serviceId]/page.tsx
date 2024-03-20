@@ -174,11 +174,11 @@ export default function PetsServiceSetPrice(){
                            </PageHeaderDescription>
                        </PageHeader>
                        <div className="space-x-3 flex items-center">
-                           <Button variant="outline" onClick={() => {
+                           <Button variant="link" onClick={() => {
                                router.back();
 
                            }}>
-                               <MoveLeft className="w-4 h-4 mr-2"/>Back
+                               Back
                            </Button>
                            <Sheet>
                                <SheetTrigger asChild>

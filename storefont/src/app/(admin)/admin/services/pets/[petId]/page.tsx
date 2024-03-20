@@ -3,7 +3,6 @@ import {PageHeader, PageHeaderDescription, PageHeaderHeading, PageHeaderShell} f
 import * as React from "react";
 import PetsServiceTemplate from "@/components/admin/services/petServiceTemplate";
 import Link from "next/link";
-import {MoveLeft} from "lucide-react";
 import {Button} from "@/components/ui/button";
 
 export default function PetsService(){
@@ -16,9 +15,9 @@ export default function PetsService(){
                         Manage your pets and price
                     </PageHeaderDescription>
                 </PageHeader>
-                <Button variant="outline">
+                <Button variant="link">
                     <Link href="/admin/services/pets" className="flex items-center gap-3">
-                        <MoveLeft className="flex items-center mr-2"/>Back
+                       Back
                     </Link>
                 </Button>
             </PageHeaderShell>

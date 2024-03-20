@@ -23,7 +23,7 @@ export function UploadThumbnail({updateForm, formData,isUploading, files,setFile
 
     React.useMemo(() => {
         if(files) {
-            updateForm({thumbnail:[...formData.thumbnail, files[0]]})
+            updateForm({thumbnail:[...formData.thumbnail!!, files[0]]})
         }
     },[files])
 

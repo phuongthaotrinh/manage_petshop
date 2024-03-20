@@ -24,6 +24,11 @@ const categoriesSchema = new mongoose.Schema({
     },
     desc: {
         type: String
+    },
+    parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+    children:{
+        type: Array,
+        default: []
     }
 }, {
     timestamps: true,

@@ -1,13 +1,20 @@
 // libraries
-import cors from 'cors';
-import 'dotenv/config';
-import express from 'express';
-import morgan from 'morgan';
-import rootRouter from './api/routes';
-import path from 'path';
-import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import 'dotenv/config'
+import express from 'express'
+import session, { MemoryStore } from 'express-session'
+import helmet from 'helmet'
+import morgan from 'morgan'
+import passport from 'passport'
+import './api/auth/googlePassport'
+import './api/auth/localPassport'
 
+// routers
+import path from 'path'
+import rootRouter from './api/routes'
+import AppConfig from './configs/app.config'
+import { HttpStatusCode } from './configs/statusCode.config'
 
 
 
@@ -21,7 +28,24 @@ const app = express()
 
 /* Request body parser */
 app.use(express.json())
-app.use(bodyParser.json());
+
+/* Security request headers */
+app.use(
+	helmet({
+		contentSecurityPolicy: {
+			useDefaults: false,
+			directives: {
+				...helmet.contentSecurityPolicy.getDefaultDirectives(),
+				'style-src': ["'self'", "'unsafe-inline'", AppConfig.BOOTSTRAP_ICONS_CDN],
+				'script-src': ["'self'", "'unsafe-inline'", AppConfig.TAILWIND_CDN]
+			}
+		},
+		referrerPolicy: {
+			policy: 'strict-origin-when-cross-origin'
+		}
+	})
+)
+
 
 /* Logger */
 app.use(morgan('tiny'))
@@ -29,9 +53,20 @@ app.use(morgan('tiny'))
 
 /* Using Session - Cookies */
 app.use(cookieParser())
+app.use(
+	session({
+		saveUninitialized: false,
+		secret: AppConfig.KEY_SESSION,
+		store: new MemoryStore(),
+		resave: true,
+		cookie: {
+			sameSite: 'none',
+			path: '/'
+		}
+	})
+)
 
 /* Enabling CORS */
-
 app.use(
 	cors({
 		origin: "*",
@@ -41,6 +76,10 @@ app.use(
 	})
 )
 
+
+/* Init passport */
+app.use(passport.initialize())
+app.use(passport.session())
 
 
 app.use('/api', rootRouter)

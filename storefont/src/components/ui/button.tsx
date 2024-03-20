@@ -20,7 +20,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
           addToCard:'border border-green-600 bg-green-500 text-white uppercase font-semibold ',
-          buyNow:'bg-dream text-white uppercase font-semibold '
+          buyNow:'bg-dream text-white uppercase font-semibold ',
+          orange: 'bg-orange-500 border border-orange-700 text-white ',
+          grey: "text-secondary-foreground border shadow-sm hover:bg-secondary bg-[#F9FAFB]"
       },
       size: {
         default: "h-9 px-4 py-2",
