@@ -66,4 +66,19 @@
 - Trang thêm sản phẩm
   ![prd_add](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/e6099619-e3cf-469d-bcb3-05c5be6acfdc)
 
-- Trang chi tiết sản phẩm
+
+>> Discount
+- Trang tạo mã giảm giá:
+  +  Chọn rule
+  ![dctype](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/fe148ced-8b62-47b9-9657-2017c0d61e98)
+
+  + Nhập thông tin
+  ![general](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/667d9cb9-7e7a-4531-a356-0a06ae6e4324)
+
+  + Nhập thời gian bắt đầu và hết hạn voucher
+  ![config](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/bb66f5a4-3a01-4f34-9710-f57425ec811d)
+
+  + Chọn đối tượng (và ví dụ)
+  ![condition](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/f6ae7496-7523-40aa-8796-2ba5d7b205c6)
+  ![example](https://github.com/phuongthaotrinh/manage_petshop/assets/51841214/a1d6ab27-7d70-4cd4-9d93-2f190d093054)
+
