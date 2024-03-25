@@ -150,7 +150,7 @@ export function ServiceShellTemplate ( ) {
                                         <ScrollArea className="h-72 w-48 rounded-md border">
                                             <div className="p-4">
                                                 <h4 className="mb-4 text-sm font-medium leading-none">Setting price for pets</h4>
-                                                {pets && pets?.map((i, j) => {
+                                                {pets && pets?.map((i:any, j:any) => {
                                                     //@ts-ignore
                                                     const PetIcons = i?.icon ? Icons[i?.icon] : PawPrint
                                                     return (
@@ -192,7 +192,7 @@ export function ServiceShellTemplate ( ) {
                             </>
                         ):(
                             <>
-                                {pets && pets?.map((i, j) => {
+                                {pets && pets?.map((i:any, j:any) => {
                                     //@ts-ignore
                                     const PetIcons = i?.icon ? Icons[i?.icon] : PawPrint
                                     return (

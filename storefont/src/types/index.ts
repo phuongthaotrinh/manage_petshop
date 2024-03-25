@@ -1,6 +1,7 @@
 import type {Icons} from "@/components/common/icon"
 import React from "react";
 import { type FileWithPath } from "react-dropzone"
+import {LucideIcon} from "lucide-react";
 
 
 export interface SearchParams {
@@ -66,11 +67,12 @@ export type FileWithPreview = FileWithPath & {
     preview: string
 }
 
-interface CloudinaryResource {
-    context?: {
-        alt?: string;
-        caption?: string;
-    };
-    public_id: string;
-    secure_url: string;
+
+export interface Navigation {
+    title: string;
+    icon?: keyof typeof Icons;
+    href?:string;
+    path?:string;
+    items?: Navigation[];
+    showEnd?:boolean
 }

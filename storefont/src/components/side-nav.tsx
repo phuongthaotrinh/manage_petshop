@@ -78,13 +78,13 @@ export function SidebarNav({className, items,type, ...props}: INavbarProps & Rea
             )}
 
             {type === "admin_service" && (
-                <>
+                <div  {...props}>
                     {navigationConfig.adminStoreMenu?.map((item, index) => {
                         //@ts-ignore
                         const Icon = item.icon ? Icons[item.icon] : ChevronLeftIcon
                         const isTrue = item && item?.v?.includes(String(paramsType));
                         return (
-                            <Link key={index} href={`${pathname}/?v=${item.v}`} className="my-3">
+                            <Link key={index} href={`${pathname}/?v=${item.v}`} className="my-3" >
                                     <span
                                         className={clsx(
                                             "group capitalize flex w-full items-center rounded-md border border-transparent px-2 py-1.5 hover:bg-slate-200 hover:text-foreground",
@@ -100,7 +100,7 @@ export function SidebarNav({className, items,type, ...props}: INavbarProps & Rea
                             </Link>
                         )
                     })}
-                </>
+                </div>
             )}
 
             {type === "product" && (

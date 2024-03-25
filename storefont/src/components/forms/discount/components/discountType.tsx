@@ -34,8 +34,11 @@ const type = [
 ];
 
 
-
-export function DiscountType () {
+interface DiscountTypeProps {
+    updateData:(value:any) => void,
+    formState:any
+}
+export function DiscountType ({updateData, formState}:DiscountTypeProps) {
     const [typeChecked, setTypeChecked] = React.useState<any | null>(null);
     const [allowChecked, setAllowChecked] = React.useState<any | null>(null)
 

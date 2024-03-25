@@ -30,8 +30,7 @@ export function ProductTableShell({mode}:ProductsTableShellProps ) {
         return raw?.filter((i:any) => i?.status === mode)
     },[raw,mode])
 
-    console.log("mode", mode);
-    console.log("data", data)
+
 
     const [isPending, startTransition] = React.useTransition()
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])

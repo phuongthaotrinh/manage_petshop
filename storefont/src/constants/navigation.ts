@@ -1,5 +1,5 @@
 
-import {type MainNavItem, type SidebarNavItem, type AdminServicesType} from "@/types"
+import {type MainNavItem, type SidebarNavItem, Navigation} from "@/types"
 
 export interface NavbarConfig {
     authNav: SidebarNavItem[],
@@ -7,7 +7,7 @@ export interface NavbarConfig {
     services:any[],
     services2:any[],
     brands:any[],
-    adminNav:any[]
+    adminNav:Navigation[]
     adminStoreMenu:any[],
     adminProductNCate:any[]
 }
@@ -125,40 +125,75 @@ export const navigationConfig: NavbarConfig = {
     ],
     adminNav:[
         {
-            title: "Dashboard",
-            href: "/admin/dashboard",
-            items: [],
+            title: "Setting",
+            icon: "SettingsIcon",
+            items:[
+                {
+                    title: "Sliders",
+                    href:"/admin/sliders",
+                    icon:"ImageIcon"
+                },
+                {
+                    title: "Categories",
+                    href:"/admin/categories",
+                    icon:"Grid2X2",
+                    items:[
+                        {
+                            title: "Create",
+                            href:"/admin/sliders/create",
+                            icon:"PlusCircle"
+                        },
+                    ]
+                },
+                {
+                    title: "Brands",
+                    href:"/admin/brands",
+                    icon:"Tags"
+                },
+            ]
+        },
+        {
+            title: "Analytics",
+            icon: "PieChart",
         },
         {
             title: "Store",
-            href: "/admin/store/info",
-            items: [],
+            href:"/admin/store/info",
+            icon:"Store"
         },
-        {
-            title: "Customers",
-            href: "/admin/customers",
-            items: [],
-        },
+
         {
             title: "Products",
-            href: "/admin/products/products",
-            items: [],
+            href:"/admin/products",
+            icon: "Package",
+        },
+        {
+            title: "Pets",
+            href:"/admin/pets",
+            icon: "PawPrint"
         },
         {
             title: "News",
-            href: "/admin/news",
-            items: [],
+            href:"/admin/news",
+            icon:"Tags"
+        },
+
+        {
+            title: "Payment",
+            href:"/admin/payment",
+            icon:"Wallet"
         },
         {
-            title: "Services",
-            href: "/admin/services",
-            items: [],
+            title: "Customers",
+            href:"/admin/customers",
+            icon:"UserRound"
         },
-        // {
-        //     title: "Discount",
-        //     href: "/admin/discount",
-        //     items: [],
-        // }
+        {
+            title: "Discount",
+            href:"/admin/discount",
+            icon:"Ticket"
+        },
+
     ],
     adminStoreMenu: [
         {

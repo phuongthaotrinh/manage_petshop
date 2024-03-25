@@ -4,7 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { MediumZoom } from "@/components/common/zoom";
 import { FileDialog } from "@/components/common/uploads/file-dialog";
-import {FormItems} from "@/components/forms/product-new";
+import {FormItems} from "@/components/forms/product-new/index2";
 
 
 
@@ -28,7 +28,7 @@ export function UploadThumbnail({updateForm, formData,isUploading, files,setFile
     },[files])
 
     return (
-        <>
+        <div>
             {files?.length ? (
                             <div className="flex items-center gap-2">
                                 {files?.map((file, i) => (
@@ -55,6 +55,6 @@ export function UploadThumbnail({updateForm, formData,isUploading, files,setFile
                                 disabled={isPending}
                             />
 
-        </>
+        </div>
     )
 }

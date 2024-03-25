@@ -49,7 +49,8 @@ export function DataTableRaw<TData, TValue>({
                                                 filterableColumns = [],
                                                 newRowLink,
                                                 deleteRowsAction,
-                                                newRowAction
+                                                newRowAction,
+
                                             }: DataTableProps<TData, TValue>) {
     const [rowSelection, setRowSelection] = React.useState({})
     const [columnVisibility, setColumnVisibility] =
@@ -82,14 +83,14 @@ export function DataTableRaw<TData, TValue>({
     })
     return (
         <div className="space-y-4 w-full">
-          <DataTableToolbar table={table}
-                            filterableColumns={filterableColumns}
-                            searchableColumns={searchableColumns}
-                            newRowLink={newRowLink}
-                            deleteRowsAction={deleteRowsAction}
-                            newRowAction={newRowAction}
+            {showToolbar &&   <DataTableToolbar table={table}
+                                                filterableColumns={filterableColumns}
+                                                searchableColumns={searchableColumns}
+                                                newRowLink={newRowLink}
+                                                deleteRowsAction={deleteRowsAction}
+                                                newRowAction={newRowAction}
 
-          />
+            />}
 
             <div className="rounded-md border">
                 <Table>
