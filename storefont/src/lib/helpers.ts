@@ -28,11 +28,14 @@ export function catchError(err: unknown) {
         })
         return toast.error(errors.join("\n"))
     } else if (err instanceof AxiosError) {
+        console.log("err", err)
         if (err.response) {
-            const message = err.response.data.error || err.response.data.message;
+            const message = err.response.data.error || err.response.data.message ;
             return toast.error(message)
         } else {
-            return toast.error(err.message)
+            let message = err.message
+
+            return toast.error(message)
         }
     } else {
         return toast.error("Something went wrong, please try again later.")

@@ -4,7 +4,12 @@ import { formatPrice } from "@/lib/helpers";
 import * as React from "react";
 import { useGetPetWeight, useGetServiceOfPets } from "@/actions/queries/services";
 import { useParams } from "next/navigation";
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 export function ServiceOfPetPriceTable() {
     const { petId } = useParams();
 
@@ -21,13 +26,20 @@ export function ServiceOfPetPriceTable() {
                                 <table className="table-auto">
                                     <thead>
                                     <tr>
-                                        <th className="border border-orange-400 cursor-pointer">
+                                        <th className="border border-orange-400 cursor-pointer  ">
                                             {servicesOfPets?.petId?.name}
                                         </th>
                                         {Object.keys(servicesOfPets?.data)?.map((key, index) => {
                                             const serviceInfo = servicesOfPets?.data[key]?.[0]?.serviceId?.name;
                                             return (
-                                                <th key={index} className="border border-orange-400 px-4 py-2">{serviceInfo}</th>
+
+                                                 <th key={index} className="border border-orange-400 px-4 py-2 truncate max-w-[41px] has-tooltip_tw">
+                                                     <span className='tooltip_tw p-2 rounded bg-black text-white text-sm'>
+                                                              {serviceInfo}
+                                                     </span>
+                                                     {serviceInfo}
+                                                 </th>
+
                                             )
                                         })}
                                     </tr>

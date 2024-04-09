@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import * as React from "react";
 import {
     Form,
-    FormControl,
+    FormControl, FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -59,7 +59,23 @@ export function ServiceForms ({mode, data, onSubmit, form}:ServiceFormsProps) {
                           </FormItem>
                       )}
                   />
+                  <FormField
+                      control={form.control}
+                      name="minTimeToDo"
+                      render={({ field }) => (
+                          <FormItem>
+                              <FormLabel>Time to do</FormLabel>
+                              <FormControl>
+                                  <Input placeholder="desc" {...field} />
+                              </FormControl>
+                              <FormDescription>Enter min time to do this service <br />
+                                  exmp: 45m
 
+                              </FormDescription>
+                              <FormMessage />
+                          </FormItem>
+                      )}
+                  />
                   <FormField
                       control={form.control}
                       name="status"

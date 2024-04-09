@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { motion } from "framer-motion";
 
 type FormWrapperProps = {
-    children: ReactNode;
+    children: ReactNode
 };
 
 const formVariants = {

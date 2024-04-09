@@ -53,3 +53,37 @@ export const services = [
         name: "tắm cạo trừ 4 chân & đầu"
     }
 ]
+
+
+export const discount_type = [
+    {
+        name: "percentage",
+        desc: "Discount applied in %",
+        id: 'percentage'
+    },
+    {
+        name: "fixed amount",
+        desc: "Discount in whole numbers",
+        id: 'amount',
+        children:[
+            {
+                name: "Total amount",
+                desc:"Apply to the total amount",
+                id: 'total_amount',
+            },
+            {
+                name: "Item specific",
+                desc:"Apply to every allowed item",
+                id: 'item_specific',
+            }
+
+        ]
+    }
+];
+
+export const discount_conditions = [
+    { value:'products', name: 'Product', desc:"Only for specific products "},
+    { value:'customer_group', name: 'Customer group', desc:"Only for specific customer group "},
+    { value:'services', name: 'Service', desc:"Only for specific services"},
+
+];

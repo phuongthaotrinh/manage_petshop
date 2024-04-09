@@ -6,7 +6,8 @@ export const validateNewService = (payload) => {
 		name: Joi.string().required(),
 		desc: Joi.string().required(),
 		userId: Joi.string().required(),
-		status: Joi.boolean().required()
+		status: Joi.boolean().required(),
+		minTimeToDo: Joi.string().required()
 	});
 	return schema.validate(payload)
 }

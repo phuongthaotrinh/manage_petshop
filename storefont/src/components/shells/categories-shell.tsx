@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import {Trash, PencilRuler, TableIcon} from "lucide-react"
+import {Trash, PencilRuler} from "lucide-react"
 import {type ColumnDef} from "@tanstack/react-table"
 import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header"
 import {Checkbox} from "@/components/ui/checkbox"
@@ -10,8 +10,6 @@ import {usePathname, useRouter} from "next/navigation";
 import {Badge} from "@/components/ui/badge";
 import {DataTableRaw} from "@/components/common/data-table/table-raw";
 import {toast} from "react-hot-toast";
-import {useGetPets, useUpdatePets, useDeletePet, useCreatePets} from "@/actions/queries/services";
-import {Switch} from '@/components/ui/switch'
 import {DataTableSkeleton} from "@/components/common/data-table/components/data-table-skeleton";
 import {catchError} from "@/lib/helpers";
 import {
@@ -26,12 +24,6 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle
-} from "@/components/ui/dialog";
-import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
@@ -39,20 +31,14 @@ import {
 } from "@/components/ui/tooltip"
 
 import { Button } from "@/components/ui/button"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import {Icons} from "@/components/common/icon";
-import {brandValidType,defaultBrand, formSchema} from "@/validations/brands"
-import {BrandForms} from "@/components/forms/brand-form";
-import {useCreateBrand, useDeleteCategory, useGetBrands, useGetCategories} from "@/actions/queries/brand&categories";
-import {Brands} from "@/types/brand";
-import {PageHeader, PageHeaderDescription, PageHeaderHeading, PageHeaderShell} from "@/components/common/page-header";
-import {Shell} from "@/components/shells/shell";
+import { useDeleteCategory, useGetCategories} from "@/actions/queries/brand&categories";
 
 export  function CategoriesShell() {
     const pathname  = usePathname();
     const route = useRouter()
     const {data, isPending } = useGetCategories();
+    console.log("useGetCategories",data)
+
     const {mutateAsync} = useDeleteCategory()
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])
     const [_, startTransition] = React.useTransition();
@@ -114,19 +100,15 @@ export  function CategoriesShell() {
                 },
             },
             {
-                accessorKey: "desc",
-                header: ({column}) => (
-                    <DataTableColumnHeader column={column} title="Desc"/>
-                ),
-                cell: ({row}) => {
-                    const id = row.original._id;
+                accessorKey: "children",
+                header: ({column}) => {
                     return (
-                        <div className="truncate">
-                            <Link href={`${pathname}/${id}`}>
-                                {row.getValue("desc")}
-                            </Link>
-                        </div>
+                        <DataTableColumnHeader column={column} title="Sub_category"/>
                     )
+                },
+                cell: ({row}) =>
+                {
+                    return <> {row.original.children.length} </>
                 },
             },
 

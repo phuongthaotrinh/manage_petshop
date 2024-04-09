@@ -2,7 +2,7 @@
 type IconProps = React.HTMLAttributes<SVGElement>
 import {PieChart, UserRound ,PlusCircle, CircleUserRound,Wallet ,BellDot, LayoutGrid, Tags,UserRoundIcon, Newspaper,SettingsIcon,Dumbbell,ImageIcon,
     Cat, Grid2X2 , Dog, Fish, Bird,Bone,Egg,PawPrint,Rabbit,Rat,Snail,Shell,Squirrel,Turtle, Store,Info, TagsIcon,Package,
-    Ticket
+    Ticket,CalendarCheck
 
 } from "lucide-react"
 
@@ -21,5 +21,6 @@ export const Icons = {
     user_round:UserRoundIcon,
     new_paper:Newspaper,
     Cat,   Dog,  Fish, Bird,  Bone, Egg,  PawPrint, Rabbit,  Rat, Snail,  Shell, Squirrel,  Turtle,  Store,Ticket,
-    Info, TagsIcon, Package, SettingsIcon,  Dumbbell, ImageIcon,  Grid2X2,  Tags, PlusCircle, UserRound,  Wallet,PieChart
+    Info, TagsIcon, Package, SettingsIcon,  Dumbbell, ImageIcon,  Grid2X2,  Tags, PlusCircle, UserRound,  Wallet,PieChart,
+    CalendarCheck
 }

@@ -2,38 +2,40 @@
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import {productStatus} from "../../constants/product"
+import {customersGender} from "../../constants/customers";
+import {discount_conditions} from "../../constants/discount";
 const discountSchema = new mongoose.Schema({
    code:{
        type: String,
        require:true
    },
-    rule_id:{
+    desc:{
+     type: String
+    },
+    discount_rule_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DiscountRule',
-    },
-    is_dynamic: {
-        type: Boolean
     },
     is_disable: {
         type: Boolean
     },
     starts_at:{
-       type: Date
+       type: JSON
     },
     ends_at:{
-       type: Date
+       type: JSON
     },
     usage_limit:{
-       type: Number,
-        require: true,
-        default: 1
+       type: JSON,
+        require: true
     },
     usage_count:{
         type: Number,
         default: 0
     },
-    valid_duration:{
-       type:String
+    condition_option: {
+       type: String,
+        enum: Object.values(discount_conditions)
     }
 }, {
     timestamps: true,

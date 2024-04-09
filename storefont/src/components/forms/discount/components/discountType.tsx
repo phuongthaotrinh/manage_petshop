@@ -1,86 +1,113 @@
 'use client';
+
 import * as React from "react";
-import {CardDiscountType} from "@/components/forms/discount/components/card-discount-type";
+import { DiscountInfer } from "@/validations/discount";
+import {UseFormReturn} from "react-hook-form";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+    FormControl, FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import {discount_type} from "@/constants/data";
 
-const type = [
-    {
-        name: "percentage",
-        desc: "Discount applied in %",
-        id: '1'
-    },
-    {
-        name: "fixed amount",
-        desc: "Discount in whole numbers",
-        id: '2',
-        children:[
-            {
-                name: "Total amount",
-                desc:"Apply to the total amount",
-                id: '2.1',
-            },
-            {
-                name: "Item specific",
-                desc:"Apply to every allowed item",
-                id: '2.2',
-            }
-
-        ]
-    },
-    {
-        name: "free shipping",
-        desc: "Override delivery amount",
-        id: '3',
-    }
-];
-
-
-interface DiscountTypeProps {
-    updateData:(value:any) => void,
-    formState:any
+type DiscountTypeProps = {
+    form:UseFormReturn<DiscountInfer>
 }
-export function DiscountType ({updateData, formState}:DiscountTypeProps) {
-    const [typeChecked, setTypeChecked] = React.useState<any | null>(null);
-    const [allowChecked, setAllowChecked] = React.useState<any | null>(null)
 
-    const handleSubmit = (value:any) => {
-        console.log("hale ", value)
-    }
+export function DiscountType ({form}:DiscountTypeProps) {
+    const [type, setType] = React.useState<string>("");
+
+    const child = React.useMemo(() => {
+        if(type) {
+            const sibling = discount_type.find((i) => i.id === type);
+            if(sibling && sibling.children && sibling.children.length > 0 ) return sibling.children;
+        }
+    },[type]);
 
 
     return (
-        <div className="space-y-5">
+        <div className="space-y-5 ">
                 <div id="discout_type" className="">
-                    <div className="grid grid-cols-3 gap-x-3 items-center">
-                        {type.map((i,j) => (
-                            <CardDiscountType
-                                key={j}
-                                data={i}
-                                name="discount_type"
-                                setTypeChecked={setTypeChecked}
-
-                            />
-                        ))}
-                    </div>
+                        <FormField
+                            control={form.control}
+                            name="discountType"
+                            render={({ field }) => (
+                                <FormItem className="">
+                                    <FormControl>
+                                        <RadioGroup
+                                            onValueChange={(e) => {
+                                                field.onChange(e);
+                                                setType(e)
+                                            }}
+                                            defaultValue={field.value}
+                                            className="grid md:grid-cols-2 sm:grid-col-1 gap-3 "
+                                        >
+                                            {discount_type.map((i:any, j:number) => (
+                                                <FormItem key={j} className="border border-gray-900/25 p-4 rounded-md ">
+                                                    <div className="flex items-center gap-3">
+                                                        <FormControl>
+                                                            <RadioGroupItem value={i.id} />
+                                                        </FormControl>
+                                                        <FormLabel className="font-normal">
+                                                            {i.name}
+                                                        </FormLabel>
+                                                    </div>
+                                                    <div>
+                                                        <FormDescription>{i.desc}</FormDescription>
+                                                    </div>
+                                                </FormItem>
+                                            ))}
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                 </div>
 
-                {typeChecked && typeChecked?.children && (
-                    <>
-                        <div id="allowcation" className="space-y-3">
-                            <h3 className="text-md font-semibold ">Allocation</h3>
+                <div className="discount-child">
+                    {child ? (
+                            <FormField
+                                control={form.control}
+                                name="allocation"
+                                render={({ field }) => (
+                                    <FormItem className="">
+                                        <FormLabel>Allowcation</FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                                onValueChange={(e) => {
+                                                    field.onChange(e);
+                                                }}
+                                                defaultValue={field.value}
+                                                className="grid md:grid-cols-3 sm:grid-col-1 gap-3 "
+                                            >
+                                                {child.map((i:any, j:number) => (
+                                                    <FormItem key={j} className="border border-gray-900/25 p-4 rounded-md ">
+                                                        <div className="flex items-center gap-3">
+                                                            <FormControl>
+                                                                <RadioGroupItem value={i.id} />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                {i.name}
+                                                            </FormLabel>
+                                                        </div>
+                                                        <div>
+                                                            <FormDescription>{i.desc}</FormDescription>
+                                                        </div>
+                                                    </FormItem>
+                                                ))}
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
-                            <div className="flex gap-x-3 items-center">
-                                {typeChecked?.children?.map((i:any,j:number) => (
-                                    <CardDiscountType
-                                        key={j}
-                                        data={i}
-                                        name="allowcation"
-                                        setAllowChecked={setAllowChecked}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </>
-                )}
+                    ):null}
+                </div>
         </div>
     )
 }

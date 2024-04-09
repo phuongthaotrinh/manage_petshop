@@ -2,7 +2,7 @@
 
 
 import React from "react";
-import {type FormItems} from "@/components/forms/product-new";
+import {type FormItems} from "@/components/forms/product-new/index2";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {Button} from "@/components/ui/button";
 import {CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";

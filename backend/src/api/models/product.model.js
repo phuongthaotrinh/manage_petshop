@@ -28,11 +28,14 @@ const productSchema = new mongoose.Schema({
     brand_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Brands',
+        default: null
     },
     category_ids:
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Categories',
+            default: null
+
         }
     ,
 

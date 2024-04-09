@@ -42,8 +42,8 @@ export enum QUERY_KEYS {
 
     //CATEGORIES
     CATEGORIES_CREATE = "categories/create",
-    CATEGORIES_GET_ALL="categories/getAllBrands",
-    CATEGORIES_GET_DETAIL="categories/getDetailBrand",
+    CATEGORIES_GET_ALL="categories/getAllCategories",
+    CATEGORIES_GET_DETAIL="categories/getDetailCategories",
     CATEGORIES_UPDATE = "categories/update",
     CATEGORIES_DELETE = "categories/delete",
 
@@ -59,5 +59,20 @@ export enum QUERY_KEYS {
     PRODUCT__GET_ALL = "products/getAllProducts",
     PRODUCT__GET_DETAIL = "products/getAllProducts",
 
-    GET_SHIPPING_FEE ="shipping/getFee"
+    GET_SHIPPING_FEE ="shipping/getFee",
+
+
+
+    //discount
+    DISCOUNT_VOUCHER_ALL = "discount/get-all",
+    DISCOUNT_VOUCHER_REMOVE = "discount/remove",
+    DISCOUNT_VOUCHER_CREATE = "discount/create",
+    DISCOUNT_VOUCHER_DETAIL = "discount/get-detail",
+
+
+    //schedule
+    SCHEDULE_GET_ALL= "schedule/get-all",
+    SCHEDULE_BOOKING= "schedule/book",
+
+
 }

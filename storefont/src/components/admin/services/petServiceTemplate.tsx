@@ -48,7 +48,6 @@ export default function PetsServiceTemplate(){
                 loading:"Loading...",
                 success:(data:any) => {
                     form.reset();
-                    console.log("data", data)
                     return "Success!"
                 },
                 error:(err) => catchError(err)

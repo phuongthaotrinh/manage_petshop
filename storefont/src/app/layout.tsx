@@ -5,6 +5,8 @@ import {Toaster} from 'react-hot-toast';
 import React from "react";
 import {Providers} from "@/components/providers"
 import PusherProviders from "@/components/providers/pusher";
+import { HydrationBoundary } from '@tanstack/react-query'
+
 const inter = Inter({subsets: ['latin']})
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
@@ -26,6 +28,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning>
         <body>
+
             <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <Providers>
                 <PusherProviders>

@@ -2,11 +2,14 @@
 import * as React from "react";
 import {cn} from "@/lib/utils"
 
- export const CardDiscountType = ({data,defaultChecked, name, setTypeChecked,setAllowChecked}:
-                                      {data:{name: string, desc:string, id:string},defaultChecked?: boolean, name:string,
-                                          setTypeChecked?: React.Dispatch<React.SetStateAction<any>>,
-                                          setAllowChecked?: React.Dispatch<React.SetStateAction<any>>
-                                      }) => {
+interface CardDiscountTypeProps {
+    data:{name: string, desc:string, id:string},
+    defaultChecked?: boolean,
+    name:string,
+    setTypeChecked?: React.Dispatch<React.SetStateAction<any>>,
+    setAllowChecked?: React.Dispatch<React.SetStateAction<any>>
+}
+ export const CardDiscountType = ({data,defaultChecked, name, setTypeChecked,setAllowChecked}:CardDiscountTypeProps) => {
     return (
         <div className={cn("border rounded-md p-2.5 h-full cursor-pointer")}>
                 <div className="flex gap-3 items-center ">

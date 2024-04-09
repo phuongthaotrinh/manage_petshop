@@ -13,25 +13,26 @@ import {
     DialogClose
 } from "@/components/ui/dialog";
 import {ArrowRight} from "lucide-react";
-import {clsx} from "clsx"
-import { AnimatePresence } from "framer-motion";
-import FormWrapper from "@/components/forms/discount/components/form-wrapper";
+import {clsx} from "clsx";
+import FormWrapper from "@/components/form-wrapper";
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {useGetListProduct} from "@/actions/queries/products";
 import {ColumnDef} from "@tanstack/react-table";
 import {Checkbox} from "@/components/ui/checkbox";
 import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header";
 import {DataTableRaw} from "@/components/common/data-table/table-raw";
-
+import { DiscountInfer, IDiscount} from "@/validations/discount";
+import {UseFormReturn} from "react-hook-form";
+import {discount_conditions} from "@/constants/data"
 interface ConditionsProps  {
-    updateData:(value:any) => void;
-    formState:any
+    updateData:(value:Partial<IDiscount>) => void;
+    formState:IDiscount,
+    form:UseFormReturn<DiscountInfer>
 }
-export function Conditions ({updateData,formState}:ConditionsProps) {
+export function Conditions ({updateData,formState, form}:ConditionsProps) {
     const [open, setOpen] = React.useState<boolean>(false)
     const [goValue, setGoValue] = React.useState<string | null>(null)
     const [selectedRowIds, setSelectedRowIds] = React.useState<any[]>([])
-
 
     const saveOptionValue = () => {
         const payload = {
@@ -52,10 +53,8 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
         updateData(payload)
     }
 
-
     return (
         <>
-            <AnimatePresence mode="wait">
                 <div id="btn_action">
                     <Button
                         onClick={() => {   setOpen(true) }}
@@ -68,7 +67,7 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
                 </div>
                 <Dialog open={open} onOpenChange={() => {setOpen(!open); setGoValue(null)}}>
                     <FormWrapper>
-                        <DialogContent className="w-full  min-w-[750px]">
+                        <DialogContent className="w-full  md:min-w-[750px]  sm:w-[90vw]">
                             {goValue ? (
                                     <ScrollArea className="h-96 ">
                                         <div className="sticky top-0 bg-gray-100 p-2 uppercase">
@@ -88,8 +87,6 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
                                             <Button variant="orange" onClick={() => saveOptionValue()}>Save</Button>
                                         </div>
                                     </ScrollArea>
-
-
                             ):(
                                <>
                                    <DialogHeader className="h-20">
@@ -99,7 +96,7 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
                                        </DialogDescription>
                                    </DialogHeader>
 
-                                   {conditions?.map((i, j) => (
+                                   {discount_conditions?.map((i, j) => (
                                        <ConditionItem formState={formState}  key={j} data={i} setGoValue={setGoValue} goValue={goValue} />
                                    ))}
                                    <DialogFooter className="sm:justify-start">
@@ -111,14 +108,9 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
                                    </DialogFooter>
                                </>
                             )}
-
                         </DialogContent>
-
                     </FormWrapper>
                 </Dialog>
-
-            </AnimatePresence>
-
         </>
     )
 }
@@ -127,7 +119,6 @@ export function Conditions ({updateData,formState}:ConditionsProps) {
 const ConditionItem = ({data, setGoValue, goValue,formState}:{data:{value: string, name: string, desc: string}, setGoValue:any, goValue:any,formState:any}) => {
 
     return (
-        <>
             <div className={clsx("p-5 border rounded-sm cursor-pointer" ,{
                 'border border-dreamOrange' : data?.value === (formState?.condition_option || goValue)
             })}
@@ -143,23 +134,11 @@ const ConditionItem = ({data, setGoValue, goValue,formState}:{data:{value: strin
                     </Button>
                 </div>
             </div>
-
-
-
-
-        </>
     )
 }
 
 
 
-
-const conditions = [
-    { value:'products', name: 'Product', desc:"Only for specific products "},
-    { value:'customer_group', name: 'Customer group', desc:"Only for specific customer group "},
-    { value:'services', name: 'Service', desc:"Only for specific services"},
-
-];
 
 const OptionValueComponent = ({data,setSelectedRowIds,selectedRowIds,formState}:{data:string,formState:any,selectedRowIds:any[],setSelectedRowIds:React.Dispatch<React.SetStateAction<any[]>>}) => {
     const {data:products,isPending} = useGetListProduct();
@@ -179,7 +158,7 @@ const OptionValueComponent = ({data,setSelectedRowIds,selectedRowIds,formState}:
                             onCheckedChange={(value) => {
                                 table.toggleAllPageRowsSelected(!!value);
                                 setSelectedRowIds((prev) =>
-                                    prev.length === products.length ? [] : products.map((row:any) => row._id)
+                                    prev.length === products?.length ? [] : products?.map((row:any) => row._id)
                                 )
                             }}
                             aria-label="Select all"
@@ -233,7 +212,7 @@ const OptionValueComponent = ({data,setSelectedRowIds,selectedRowIds,formState}:
     )
     return (
         <>
-            {data === "products" && (<>
+            {data === "products" &&  products &&  (<>
                <div className='w-full p-2'>
                    <DataTableRaw
                        showToolbar={false}
