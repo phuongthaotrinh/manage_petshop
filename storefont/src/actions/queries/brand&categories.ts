@@ -2,7 +2,7 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {INewPost} from "@/types/post";
 import * as ACTION from "@/actions/apis/brand&categories";
 import {QUERY_KEYS} from "@/actions/queryKeys";
-
+import http from "@/lib/http"
 
 //======== BRANDS ========//
 export const useCreateBrand = () => {
@@ -72,7 +72,11 @@ export const useCreateCategory = () => {
 export const useGetCategories = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.CATEGORIES_GET_ALL],
-        queryFn: () => ACTION.getAllCategories(),
+        queryFn: async () => {
+            const {payload} = await http.get('categories/get-all-categories') as any;
+            console.log("oayload", payload)
+            return payload?.data ? payload?.data : []
+        },
     });
 };
 

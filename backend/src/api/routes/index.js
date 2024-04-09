@@ -10,7 +10,9 @@ import CategoriesRoute from './categories.route';
 import ComboRoute from "./combo.route";
 import ProductRoute from "./products.route";
 import PaymentRoute from "./payment";
-import AuthRoute from "./auth.route"
+import AuthRoute from "./auth.route";
+import DiscountRoute from "./discount.route";
+import ScheduleServiceRoute from "./schedule_service.route";
 const rootRouters = [
 	UserRouter,
 	NewsRouter,
@@ -23,7 +25,9 @@ const rootRouters = [
 	ComboRoute,
 	ProductRoute,
 	PaymentRoute,
-	AuthRoute
+	AuthRoute,
+	DiscountRoute,
+	ScheduleServiceRoute
 ]
 
 const router = express.Router();

@@ -16,6 +16,7 @@ export const createProduct = useCatchAsync(async (req, res) => {
         const data = await ProductService.createProduct2(req.body)
         return res.status(HttpStatusCode.OK).json({
             data: data,
+            message:"Created product successfully!"
         });
     } catch (error) {
         return res.status(error.status || HttpStatusCode.INTERNAL_SERVER_ERROR).json({

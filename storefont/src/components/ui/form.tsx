@@ -96,6 +96,7 @@ const FormLabel = React.forwardRef<
       className={cn("capitalize",{className})}
       htmlFor={formItemId}
       {...props}
+
     />
   )
 })

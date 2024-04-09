@@ -3,7 +3,7 @@
 import {useGetDetailPage} from "@/actions/queries/products"
 import {GallaryCarousel} from "@/components/common/gallary-carousel";
 import { EmblaOptionsType } from 'embla-carousel'
-import {ProductDetailTemplate} from "@/components/product-detail-template";
+import {ProductDetailTemplate} from "@/components/admin/product-detail-template";
 import {UseQueryResult} from "@tanstack/react-query";
 import {Shell} from "@/components/shells/shell"
 
@@ -17,7 +17,7 @@ interface IParams{
 const OPTIONS: EmblaOptionsType = {}
 
 export default function ProductDetailPage({params}:IParams )  {
-    const detail:UseQueryResult<any, Error> = useGetDetailPage(params.productId);
+    const data= useGetDetailPage(params.productId);
     const draftProduct = [
         "https://petshop.fringestudio.com/cdn/shop/files/314133_SpringChicken_PHOTO_WEB_720x.jpg?v=1708122120",
         "https://petshop.fringestudio.com/cdn/shop/files/314133_SpringChicken_PHOTO_WEB_CALLOUTS_720x.jpg?v=1708122124",
@@ -37,7 +37,7 @@ export default function ProductDetailPage({params}:IParams )  {
             </div>
             <div id="content" className="p-5">
                 <ProductDetailTemplate
-                    data={detail}
+                    data={data}
                     productId={params.productId}
                 />
 

@@ -3,13 +3,17 @@ import 'dotenv/config'
 import mongoose from 'mongoose'
 import {productStatus} from "../../constants/product"
 const discountConditionProductSchema = new mongoose.Schema({
-    product_id: {
+    data: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-    },
-    condition_id:{
+    }],
+    discount_id:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DiscountCondition',
+        ref: 'Discount',
+    },
+    discount_rule_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DiscountRule',
     }
 }, {
     collection: 'discount_condition_product',
@@ -20,5 +24,5 @@ const discountConditionProductSchema = new mongoose.Schema({
 })
 
 
-const DiscountConditionGroup = mongoose.model('DiscountConditionGroup', discountConditionProductSchema);
-export default DiscountConditionGroup;
+const DiscountConditionProduct = mongoose.model('DiscountConditionProduct', discountConditionProductSchema);
+export default DiscountConditionProduct;

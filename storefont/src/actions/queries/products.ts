@@ -32,16 +32,14 @@ import {NewsAPI} from "@/actions/apis/services";
              return payload?.data ? payload?.data: []
          }
      })
-
  }
 
  export const useGetDetailPage = (productId: string) => {
      return useQuery({
          queryKey: [QUERY_KEYS.PRODUCT__GET_DETAIL,productId],
          queryFn: async() =>{
-             const url =  `${process.env.NEXT_PUBLIC_API_BACKEND!}/product/get-detail/${productId}`
-             const data = (await(await fetch(url)).json());
-             return data? data?.data : []
+            const {payload} = await http.get(`product/get-detail/${productId}`) as any;
+            return payload?.data ? payload.data: []
          },
          enabled: !!productId
      })

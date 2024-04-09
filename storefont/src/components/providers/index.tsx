@@ -5,7 +5,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import * as React from 'react'
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 
-
 export function Providers(props: { children: React.ReactNode }) {
     const [queryClient] = React.useState(
         () =>
@@ -14,8 +13,8 @@ export function Providers(props: { children: React.ReactNode }) {
                     queries: {
                         refetchOnMount:false,
                         refetchOnReconnect: false,
-                          staleTime: 12 * 1000,
-                         // refetchInterval: 30 * 1000,
+                          staleTime:3000,
+                         // refetchInterval:2000,
                     },
                 },
             }),
@@ -23,13 +22,10 @@ export function Providers(props: { children: React.ReactNode }) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            {/*<HydrationBoundary state={typeof window !== 'undefined' ? (window as any).__NEXT_DATA__.props.dehydratedState : {}}>*/}
-
             <ReactQueryStreamedHydration>
                     {props.children}
             </ReactQueryStreamedHydration>
             <ReactQueryDevtools initialIsOpen={false} />
-            {/*</HydrationBoundary>*/}
         </QueryClientProvider>
     )
 }

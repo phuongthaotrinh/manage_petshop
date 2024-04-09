@@ -33,10 +33,10 @@ function compareArrays(a:any[], productVariant:any[]) {
     }
     return result;
 }
-export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<any, Error>,productId: string}) {
+export function ProductDetailTemplate  ({data,productId }:{data: UseQueryResult<any, Error>,productId: string}) {
     const [mode, setMode] = React.useState<"addCart" | "payment">("addCart")
     const route  = useRouter()
-    const {data:product, isPending, isError} = data;
+    const {data:product, isPending, isError} = data
     const id = generateUniqueId();
     const [variantSelect, setVariantSelect] = React.useState<{type: any, value: string}[]>([]);
     const [variantData, setVariantData] = React.useState<any>()
@@ -47,6 +47,12 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
         },
         mode: "onChange",
     })
+
+    const existVariant = React.useMemo(() => {
+        return []
+    },[product])
+
+console.log("product", variantData)
 
 
     const onSubmit = (value:z.infer<typeof quantitySchema>) => {
@@ -66,6 +72,7 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
     }
 
     const handleClick = React.useCallback((type: any, value: string) => {
+        console.log("handleClick", type, value)
         setVariantSelect(prevVariantSelect => {
             let updatedVariants;
             if (prevVariantSelect.some((i) => i.type.includes(type))) {
@@ -87,7 +94,7 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
     }, [product?.productVariant, variantSelect]);
 
 
-    if(data.isError) notFound()
+    if(isError) notFound()
 
 
     if(product)
@@ -117,14 +124,15 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
                 </div>
             </div>
             <div id="price">
-                Price: {formatPrice(variantData?.price)}
+                {variantData?._id? <>Price: {formatPrice(variantData?.price)}</> : <p className="invisible">Price: {formatPrice(variantData?.price)}</p>}
+
             </div>
-            <div id="variant" className="h-80 space-y-5">
-                {product.options?.map((i:any, j:any) => (
+            <div id="variant" className=" space-y-5">
+                {product.options?.sort((a: any, b: any) => a.title.localeCompare(b.title))?.map((i:any, j:any) => (
                     <div key={j} className=" space-y-3">
                          <span className="font-semibold uppercase">{i?.title}</span>
                             <div className="flex flex-wrap gap-3  ">
-                                {i.data?.map((ii:any, jj:any) => (
+                                {i.data?.sort((a: any, b: any) => a.value.localeCompare(b.value))?.map((ii:any, jj:any) => (
                                     <Button
                                         className={clsx({
                                             "border border-dreamOrange":variantSelect.some((item) => item.type === i?.title && item.value===ii?._id)
@@ -154,11 +162,11 @@ export function ProductDetailTemplate  ({data,productId }:{data:UseQueryResult<a
                         />
 
                         <div className="flex gap-3 items-center w-full">
-                            <Button type="submit" size="lg" variant="addToCard" className="w-full" onClick={() => setMode("addCart")}>
+                            <Button type="submit" size="cart" variant="addToCard" disabled={!variantData?._id} >
                                 <ShoppingBag  className="w-4 h-4- mr-2" />
                                 Add to cart
                             </Button>
-                            <Button type="submit" size="lg" variant="default" className="w-full"  onClick={() => setMode("payment")}>
+                            <Button type="submit" size="cart" variant="default" disabled={!variantData?._id} className="w-full"  onClick={() => setMode("payment")}>
                                 <ArrowRightIcon  className="w-4 h-4- mr-2" />
                                 Payment
                             </Button>

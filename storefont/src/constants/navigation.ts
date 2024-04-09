@@ -150,34 +150,42 @@ export const navigationConfig: NavbarConfig = {
                     href:"/admin/brands",
                     icon:"Tags"
                 },
+                {
+                    title: "Pets",
+                    href:"/admin/pets",
+                    icon: "PawPrint"
+                },
+                {
+                    title: "News",
+                    href:"/admin/news",
+                    icon:"Tags"
+                },
+                {
+                    title: "Store",
+                    href:"/admin/store/info",
+                    icon:"Store"
+                },
             ]
+        },
+        {
+            title: "Services",
+            href:"/admin/services",
+            icon:"UserRound"
         },
         {
             title: "Analytics",
             icon: "PieChart",
         },
         {
-            title: "Store",
-            href:"/admin/store/info",
-            icon:"Store"
+            title: "Schedule",
+            href:"/admin/schedule",
+            icon:"CalendarCheck"
         },
-
         {
             title: "Products",
             href:"/admin/products",
             icon: "Package",
         },
-        {
-            title: "Pets",
-            href:"/admin/pets",
-            icon: "PawPrint"
-        },
-        {
-            title: "News",
-            href:"/admin/news",
-            icon:"Tags"
-        },
-
         {
             title: "Payment",
             href:"/admin/payment",

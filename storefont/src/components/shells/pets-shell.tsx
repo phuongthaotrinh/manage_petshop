@@ -48,7 +48,7 @@ import {PetsForms} from "@/components/forms/pets-forms";
 export  function PetsShell() {
     const pathname  = usePathname();
     const route = useRouter()
-    const { data, isPending } = useGetPets();
+     const { data, isPending } = useGetPets();
     const { mutateAsync:updateFn } = useUpdatePets();
     const { mutateAsync:deleteFn } = useDeletePet();
     const { mutateAsync:createFn } = useCreatePets();

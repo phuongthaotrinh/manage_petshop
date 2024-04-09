@@ -36,7 +36,7 @@ export function DataTableToolbar<TData>({
                                         }: DataTableToolbarProps<TData>) {
     const isFiltered = table.getState().columnFilters.length > 0
     const [isPending, startTransition] = React.useTransition();
-
+    console.log("filterableColumns",filterableColumns)
 
     return (
         <div className="flex w-full items-center justify-between space-x-2 overflow-auto p-1">
@@ -63,13 +63,13 @@ export function DataTableToolbar<TData>({
                                 />
                             )
                     )}
-                {filterableColumns.length > 0 &&
-                    filterableColumns.map(
+                {filterableColumns?.length > 0 &&
+                    filterableColumns?.map(
                         (column) =>
-                            table.getColumn(column.id ? String(column.id) : "") && (
+                            table?.getColumn(column.id ? String(column.id) : "") && (
                                    <DataTableFacetedFilter
                                        key={String(column.id)}
-                                       column={table.getColumn(column.id ? String(column.id) : "")}
+                                       column={table?.getColumn(column.id ? String(column.id) : "")}
                                        title={column.title}
                                        options={column.options}
                                    />

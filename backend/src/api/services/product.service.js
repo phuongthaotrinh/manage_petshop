@@ -9,6 +9,7 @@ import ProductVariantOption from "../models/product_variant_option.model";
 
 
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 export async function createProduct(draftProduct) {
     try {
@@ -65,41 +66,51 @@ export async function createProduct(draftProduct) {
 
 export async function createProduct2(draftProduct) {
     try {
+        const existProduct = await Product.exists({title: draftProduct.generalInfo.title});
+        if(existProduct) throw  createHttpError.BadRequest("Can't duplicate product");
+
         // 1. Lưu thông tin Product
-        const isHasVariant = draftProduct.variants.length > 0
-        const product_info = {...draftProduct.generalInfo, ...draftProduct.organize, isHasVariant:isHasVariant, price:draftProduct.price, inventory_quantity: draftProduct.inventory_quantity};
+        const isHasVariant = draftProduct.variants.length > 0;
+        const slug = draftProduct.generalInfo.handle ? draftProduct.generalInfo.handle : slugify(draftProduct.generalInfo.title)
+        const product_info = {
+            ...draftProduct.generalInfo,
+            ...draftProduct.organize,
+            handle:slug,
+            isHasVariant:isHasVariant
+        };
 
         const product = await Product.create(product_info)
 
         //save productOption and productOptionValue
 
-        draftProduct.variants.forEach(function(variant) {
-            variant.value.forEach(function(valueObj) {
-                const productOption = new ProductOption({
-                    title: variant.name,
-                    value: valueObj.value,
-                    product_id: product._id
-                });
-                productOption.save();
-            });
-        })
-
-
-        await createProductVariantOptions(draftProduct.productVariants, product._id)
-            .then(productOptionValue => {
-                console.log('ProductVariantOptions created:', ProductOptionValue);
-                createProductVariants(draftProduct.productVariants, productOptionValue,product._id)
-                    .then(productVariantsResult => {
-                        console.log('ProductVariants created:', productVariantsResult);
-                    })
-                    .catch(error => {
-                        console.error('Error creating ProductVariants:', error);
+        if(draftProduct.variants) {
+            draftProduct.variants.forEach(function(variant) {
+                variant.value.forEach(function(valueObj) {
+                    const productOption = new ProductOption({
+                        title: variant.name,
+                        value: valueObj.value,
+                        product_id: product._id
                     });
-            })
-            .catch(error => {
-                console.error('Error creating ProductVariantOptions:', error);
+                    productOption.save();
+                });
             });
 
+            await createProductVariantOptions(draftProduct.productVariants, product._id)
+                .then(productOptionValue => {
+                    console.log('ProductVariantOptions created:', productOptionValue);
+                    createProductVariants(draftProduct.productVariants, productOptionValue,product._id)
+                        .then(productVariantsResult => {
+                            console.log('ProductVariants created:', productVariantsResult);
+                        })
+                        .catch(error => {
+                            console.error('Error creating ProductVariants:', error);
+                        });
+                })
+                .catch(error => {
+                    console.error('Error creating ProductVariantOptions:', error);
+                });
+        }
+        return product
     } catch (error) {
         console.error('Error creating product:', error);
     }

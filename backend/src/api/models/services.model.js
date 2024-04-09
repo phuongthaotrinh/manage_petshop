@@ -18,6 +18,9 @@ const servicesSchema = new mongoose.Schema({
     desc:{
         type: String,
     },
+    minTimeToDo:{
+        type: String
+    }
 
 }, {
   timestamps: true,

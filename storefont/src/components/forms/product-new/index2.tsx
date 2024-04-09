@@ -29,7 +29,7 @@ import {FileDialog} from "@/components/common/uploads/file-dialog";
 import {RenderImage} from "@/components/common/render-image";
 import {useCreateProduct} from "@/actions/queries/products";
 import {toast} from "react-hot-toast";
-import {isArrayOfFile} from "@/lib/helpers";
+import {catchError, isArrayOfFile} from "@/lib/helpers";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {ProductVariantsNewTable} from "@/components/forms/product-new/components/table-product-variant";
@@ -45,11 +45,12 @@ export interface FormItems {
         description:string,
         discountable:boolean,
         status: string
-
+        inventory_quantity?: number | null,
+        price?: number | null,
     },
     organize:{
-        brand_id: string,
-        category_ids: string,
+        brand_id: string | null,
+        category_ids: string | null,
         tags:any[]
     },
     variants:
@@ -83,11 +84,13 @@ export const initialValues: FormItems = {
         material:"",
         description:"",
         discountable:true,
-        status: ""
+        status: "",
+        inventory_quantity:null,
+        price:null
     },
     organize:{
-        brand_id: "",
-        category_ids: "",
+        brand_id: null,
+        category_ids: null,
         tags:[]
     },
     variants:[],
@@ -122,17 +125,22 @@ export default function ProductNew () {
         formData.galleries = galleries;
 
         formData.generalInfo.status = status;
-        // startTransition(() => {
-        //     toast.promise((mutateAsync(formData)), {
-        //         loading: "creating...",
-        //         error:"Fail",
-        //         success:(data:any) => {
-        //             console.log("dtaa", data);
-        //             return "create success"
-        //         }
-        //     })
-        // })
-        console.log("formData",formData)
+
+        if(formData.productVariants.length > 0 || formData.variants.length > 0){
+            formData.generalInfo.inventory_quantity = null;
+            formData.generalInfo.price = null;
+        }
+
+        startTransition(() => {
+            toast.promise((mutateAsync(formData)), {
+                loading: "creating...",
+                error:(err) => catchError(err),
+                success:(data:any) => {
+                    setFormData(initialValues);
+                    return "Create product successfully!"
+                }
+            })
+        })
     }
 
     const updateForm = (fieldToUpdate: any) => {
@@ -141,77 +149,130 @@ export default function ProductNew () {
     }
 
 
-    console.log("variant", formData.productVariants)
+
+    const stepForm = React.useMemo(() => {
+
+        let init = ["item-1"]
+        if(formData.generalInfo.title && formData.generalInfo.subtitle){
+            init = ([...init ,"item-2"])
+        }
+
+        if(formData.organize.brand_id && formData.organize.category_ids){
+            init = ([...init ,"item-3"])
+        }
+
+        return init
+    }, [formData]);
+
 
     return (
-        <div className="grid grid-cols-4 gap-4 p-5">
-            <section className="w-full" >
-                dow
-            </section>
-            <section className="col-span-3">
-                <form  className="w-full flex flex-col justify-between h-full space-y-5">
-                    <section id="button_control" className="mb-8 relative">
-                        <div className=" flex justify-between">
+        <div className="">
+
+                <form  className="w-full  h-full space-y-5 relative">
+                    <div  className=" sticky h-16 bg-gray-100 top-0 w-full rounded-lg  " style={{zIndex:999}}>
+                        <div className="flex items-center justify-between h-full px-8" >
                             <Button variant="link" type="button" onClick={() => close()}>
-                                <X className="w-6 h-6"/>
+                                <X className="w-6 h-6"/>Close
                             </Button>
-                            <div className="space-x-2">
+                            <div className="space-x-2 ">
                                 <Button variant="ghost" type="button" disabled={!formData.generalInfo.title}  size="sm" onClick={() => publish("draft")}>Save as draft</Button>
                                 <Button variant="default" type="button" disabled={!formData.generalInfo.title} size="sm" onClick={() => publish("published")}>Publish product</Button>
                             </div>
                         </div>
-                        <div className="border my-2"></div>
-                    </section>
 
-                    <Accordion type="multiple" defaultValue={['item-1','item-2','item-3']} >
-                        <AccordionItem value="item-1">
-                            <AccordionTrigger>
+                    </div>
+                   <div className="grid grid-cols-3 gap-4   px-8 w-auto z-10">
+                       <div className="">
+                         control widget
+                       </div>
+                       <div className="h-auto min-h-screen col-span-2  relative">
+                           <Accordion type="multiple" defaultValue={["item-1"]}  value={stepForm}>
+                               <AccordionItem value="item-1">
+                                   <AccordionTrigger>
                                     <span className="font-semibold text-base relative
                                           after:relative after:bottom-0 after:left-2 after:content-['*']
                                           after:text-2xl after:text-red-600 ">
                                         General information
                                     </span>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <Card>
-                                    <CardContent>  <GeneralInfomation formData={formData} updateForm={updateForm} /></CardContent>
-                                </Card>
-                            </AccordionContent>
-                        </AccordionItem>
+                                   </AccordionTrigger>
+                                   <AccordionContent>
+                                       <Card>
+                                           <CardContent>  <GeneralInfomation formData={formData} updateForm={updateForm} /></CardContent>
+                                       </Card>
+                                   </AccordionContent>
+                               </AccordionItem>
 
-                        <AccordionItem value="item-2">
-                            <AccordionTrigger>
+                               <AccordionItem value="item-2">
+                                   <AccordionTrigger>
                                 <span className="font-semibold text-base relative ">
                                     Organize
                                 </span>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <Card>
-                                    <CardContent> <Organize updateForm={updateForm} formData={formData} setOpen={setOpen} open={open} /></CardContent>
-                                </Card>
-                            </AccordionContent>
-                        </AccordionItem>
+                                   </AccordionTrigger>
+                                   <AccordionContent>
+                                       <Card>
+                                           <CardContent> <Organize updateForm={updateForm} formData={formData} setOpen={setOpen} open={open} /></CardContent>
+                                       </Card>
+                                   </AccordionContent>
+                               </AccordionItem>
 
 
-                        <AccordionItem value="item-3">
-                            <AccordionTrigger>
+                               <AccordionItem value="item-3">
+                                   <AccordionTrigger>
                                 <span className="font-semibold text-base relative ">
                                     Detail
                                 </span>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <Card>
-                                    <CardContent>
-                                        <Variants updateForm={updateForm } formData={formData} setFormData={setFormData} limit={2} />
-                                        <ProductVariants  updateForm={updateForm} formData={formData} />
-                                    </CardContent>
-                                </Card>
-                            </AccordionContent>
-                        </AccordionItem>
+                                   </AccordionTrigger>
+                                   <AccordionContent>
+                                       <Card>
+                                           <CardContent>
+                                               {formData.variants.length === 0 && (
+                                                   <div className="space-y-3 pt-3">
+                                                       <div className="space-y-2">
+                                                           <Label className=" after:relative after:bottom-0 after:left-2 after:content-['*']
+                                                            after:text-red-600 font-semibold text-muted-foreground">
+                                                               Inventory quantity
+                                                           </Label>
+                                                           <Input
+                                                               autoFocus
+                                                               type="number"
+                                                               name="name"
+                                                               id="name"
+                                                               placeholder="Winter Jacket"
+                                                               onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,inventory_quantity: +e.target.value}})}
+                                                               className="w-full"
 
-                    </Accordion>
+                                                           />
+                                                       </div>
+                                                       <div className="space-y-2">
+                                                           <Label className=" after:relative after:bottom-0 after:left-2 after:content-['*']
+                                                            after:text-red-600 font-semibold text-muted-foreground">
+                                                              price
+                                                           </Label>
+                                                           <Input
+                                                               autoFocus
+                                                               type="number"
+                                                               name="name"
+                                                               id="name"
+                                                               placeholder="Inventory quantity"
+                                                               onChange={(e) => updateForm({ generalInfo:{...formData.generalInfo,price: +e.target.value}})}
+                                                               className="w-full"
+
+                                                           />
+                                                       </div>
+                                                   </div>
+                                               )}
+                                               <Variants updateForm={updateForm} formData={formData} setFormData={setFormData} limit={2} />
+                                               {formData.variants.length > 0 && <ProductVariants updateForm={updateForm} formData={formData} />}
+                                           </CardContent>
+                                       </Card>
+                                   </AccordionContent>
+                               </AccordionItem>
+
+                           </Accordion>
+                       </div>
+                   </div>
+
                 </form>
-            </section>
 
         </div>
     )

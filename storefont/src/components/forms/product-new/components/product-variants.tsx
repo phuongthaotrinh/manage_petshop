@@ -16,17 +16,10 @@ import {
 } from "@/components/ui/select";
 import React from "react";
 import {useForm} from "react-hook-form";
-import {FormItems} from "@/components/forms/product-new";
+import {FormItems} from "@/components/forms/product-new/index2";
 import {TableAddProductVariant} from "@/components/forms/product-new/components/table-addProductVariant";
 import {setValuesOfForm} from "@/lib/helpers";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+
 
 
 
@@ -181,7 +174,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                         <AccordionContent>
                                                             <div id="product_attribute_option">
                                                                 <div className="grid grid-cols-2 gap-3">
-                                                                    {formData?.variants?.map((i, j) => (
+                                                                    {formData?.variants?.map((i:any, j:any) => (
                                                                         <div key={j} >
                                                                             <FormField
                                                                                 control={variantForm.control}
@@ -197,7 +190,7 @@ export function ProductVariants ({formData,updateForm}:IProductVariants) {
                                                                                             <SelectContent>
                                                                                                 <SelectGroup>
                                                                                                     <SelectLabel>{i?.name}</SelectLabel>
-                                                                                                    {i?.value?.map((ii,jj) => (
+                                                                                                    {i?.value?.map((ii:any,jj:any) => (
                                                                                                         <SelectItem
                                                                                                             key={jj}
                                                                                                             value={ii?.value}

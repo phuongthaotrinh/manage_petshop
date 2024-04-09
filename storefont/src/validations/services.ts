@@ -7,6 +7,7 @@ export const formSchema = z.object({
     status: z.boolean(),
     desc: z.string(),
     userId:z.string(),
+    minTimeToDo: z.nullable(z.string()),
 });
 
 
@@ -18,6 +19,7 @@ export const defaultVal = {
     desc: "",
     weightId:"",
     userId:"",
+    minTimeToDo:null
 }
 
 export type servicesValidType = z.infer<typeof formSchema>;

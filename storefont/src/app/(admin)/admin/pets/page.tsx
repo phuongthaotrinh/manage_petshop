@@ -5,9 +5,8 @@ import * as React from "react";
 import {PetsWeightBtn} from "@/components/admin/services/pets-weight-btn";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import http from "@/lib/http";
+export default async function PetPages() {
 
-export default  function PetPages() {
     return (
         <>
             <Shell variant="sidebar" as="div">
@@ -27,8 +26,7 @@ export default  function PetPages() {
                         </Button>
                     </div>
                 </PageHeaderShell>
-    
-                    <PetsShell  />
+                    <PetsShell />
             </Shell>
             
         </>

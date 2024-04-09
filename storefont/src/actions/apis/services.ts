@@ -48,10 +48,14 @@ export async function getALlPets() {
     // if(data?.data) {
     //     return  data?.data ? data?.data as Pets[] : []
     // }
-    const {data} =  await  http.get(NewsAPI.GET_ALL);
+    const {data} =  await  http.get(NewsAPI.GET_ALL,{
+
+    } );
     return  data.data ? data.data: []
 
 }
+
+
 
 export async function updatePets(payload:any) {
     return await  http.patch(NewsAPI.UPDATE,payload)
