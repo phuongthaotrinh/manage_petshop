@@ -86,9 +86,6 @@ export function DataTableRaw<TData, TValue>({
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
         globalFilterFn:"includesString",
-        debugTable: true,
-        debugHeaders: true,
-        debugColumns: false,
     });
 
 

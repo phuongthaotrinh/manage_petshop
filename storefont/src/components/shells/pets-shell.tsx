@@ -48,7 +48,7 @@ import {PetsForms} from "@/components/forms/pets-forms";
 export  function PetsShell() {
     const pathname  = usePathname();
     const route = useRouter()
-     const { data, isPending } = useGetPets();
+     const { data, isPending, isError, isSuccess } = useGetPets();
     const { mutateAsync:updateFn } = useUpdatePets();
     const { mutateAsync:deleteFn } = useDeletePet();
     const { mutateAsync:createFn } = useCreatePets();
@@ -297,10 +297,13 @@ export  function PetsShell() {
 
     return (
         <>
-            {isPending  ? (
-                <DataTableSkeleton columnCount={6} />
-            ):(
+            {isError && <>Somthing went wrong</>}
+            {isPending  &&   <DataTableSkeleton columnCount={6} />}
+
+
+            {isSuccess && (
                 <>
+
                     <Dialog open={open} onOpenChange={() => {
                         setOpen(!open);
                         form.reset();
@@ -315,7 +318,7 @@ export  function PetsShell() {
                         </DialogContent>
                     </Dialog>
 
-                    {data && (
+                    {isSuccess && data  && (
                         <DataTableRaw columns={columns} data={data} showToolbar={true}
                                       searchableColumns={[
                                           {

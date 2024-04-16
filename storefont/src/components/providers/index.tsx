@@ -13,8 +13,8 @@ export function Providers(props: { children: React.ReactNode }) {
                     queries: {
                         refetchOnMount:false,
                         refetchOnReconnect: false,
-                          staleTime:3000,
-                         // refetchInterval:2000,
+                        staleTime:3000,
+                        refetchInterval:4000,
                     },
                 },
             }),

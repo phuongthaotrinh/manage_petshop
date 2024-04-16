@@ -74,5 +74,11 @@ export enum QUERY_KEYS {
     SCHEDULE_GET_ALL= "schedule/get-all",
     SCHEDULE_BOOKING= "schedule/book",
 
+    //role
+    PERMISSIONS_GET_ALL='permissions/get-all',
+
+    ROLE_CREATE='role/create',
+    ROLE_GET_ALL ='roles/get-all',
+    ROLE_DELETE='roles/delete'
 
 }

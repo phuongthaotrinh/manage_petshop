@@ -57,7 +57,14 @@ class SessionToken {
     }
 }
 
-export const clientSessionToken = new SessionToken()
+export const clientSessionToken = new SessionToken();
+export type PayloadServer ={
+    status: any,
+    data: any,
+    message: string
+}
+
+
 
 const request = async <Response>(
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -88,7 +95,7 @@ const request = async <Response>(
         body,
         method
     })
-    const payload: Response= await res.json()
+    const payload:PayloadServer= await res.json()
     const data = {
         status: res.status,
         payload
@@ -97,10 +104,7 @@ const request = async <Response>(
     if (!res.ok) {
         if (res.status === ENTITY_ERROR_STATUS) {
             throw new EntityError(
-                data as {
-                    status: 422
-                    payload: EntityErrorPayload
-                }
+                data as any
             )
         } else {
             throw new HttpError(data)

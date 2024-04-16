@@ -59,7 +59,9 @@ export const allScheduleService = async(req, res) => {
                 return {
                     ...item.toObject(),
                     serviceData: item.services,
-                    services: item.services._id
+                    services: item.services._id,
+                    dateString: `${item.timer.date.day}/${item.timer.date.month}/${item.timer.date.year}` ,
+                    timeString: `${item.timer.time.hour}:${item.timer.time.minute}`
                 };
             });
 

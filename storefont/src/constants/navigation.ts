@@ -168,6 +168,11 @@ export const navigationConfig: NavbarConfig = {
             ]
         },
         {
+            title: "Roles",
+            icon: "SettingsIcon",
+            href:"/admin/roles",
+        },
+        {
             title: "Services",
             href:"/admin/services",
             icon:"UserRound"

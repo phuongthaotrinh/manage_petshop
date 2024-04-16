@@ -18,7 +18,6 @@ const servicesOfPetsSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Weight',
         }
-
 }, {
     timestamps: true,
     versionKey: false,

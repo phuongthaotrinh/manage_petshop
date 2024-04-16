@@ -87,3 +87,14 @@ export const discount_conditions = [
     { value:'services', name: 'Service', desc:"Only for specific services"},
 
 ];
+
+export const defaultMethodPermission = {
+    READ: "READ",
+    CREATE: "READ",
+    UPDATE: "UPDATE",
+    DELETE:"DELETE",
+    IMPORT:"IMPORT",
+    EXPORT: "EXPORT",
+    VIEW_REPORT:"VIEW_REPORT",
+    EXPORT_REPORT: "EXPORT_REPORT"
+}

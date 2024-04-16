@@ -44,7 +44,7 @@ export function ResizableTemplate({
                     defaultSize={defaultLayout[0]}
                     collapsedSize={navCollapsedSize}
                     collapsible={true}
-
+                        minSize={15}
                     className={cn(isCollapsed && "min-w-[50px] transition-all duration-300 ease-in-out")}
                 >
                     <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]': 'px-2')}>
