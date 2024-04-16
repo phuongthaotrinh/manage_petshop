@@ -1,4 +1,4 @@
-export const Weight = [
+export const weights = [
     {
         value: "lower_2kg",
         name: "< 2kg"
@@ -30,9 +30,5 @@ export const Weight = [
     {
         value: "greater_than_30_to_40kg",
         name: ">30 - 40kg"
-    },
-    {
-        value: "greater_40kg",
-        name: "> 40kg"
     }
-]
+];

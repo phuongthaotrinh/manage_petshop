@@ -6,7 +6,11 @@ import express from 'express'
 import session, { MemoryStore } from 'express-session'
 import helmet from 'helmet'
 import morgan from 'morgan'
-import passport from 'passport'
+import passport from 'passport';
+
+import {engine} from 'express-handlebars';
+
+
 import './api/auth/googlePassport'
 import './api/auth/localPassport'
 
@@ -15,8 +19,11 @@ import path from 'path'
 import rootRouter from './api/routes'
 import AppConfig from './configs/app.config'
 import { HttpStatusCode } from './configs/statusCode.config'
-
-
+import {createRoleAndPer} from "./api/controllers/roleNPermission.controller";
+import {createAdminServer} from "./api/services/createAdmin.server";
+import * as bodyParser  from  "body-parser"
+import {createNewAccount} from "./api/controllers/customers.controller";
+import UserModel from "./api/models/user.model";
 
 
 // resolve path
@@ -52,7 +59,11 @@ app.use(morgan('tiny'))
 
 
 /* Using Session - Cookies */
-app.use(cookieParser())
+app.use(cookieParser());
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(
 	session({
 		saveUninitialized: false,
@@ -81,10 +92,43 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
+/* Engine */
+
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", path.resolve(SRC_FOLDER, "./views"));
+
+
 
 app.use('/api', rootRouter)
 
+app.get('/', async (req, res) => {
+	try {
+		const countUser = await UserModel.countDocuments();
+		if(countUser === 0){
+			await res.render("home");
+		}else{
+			await res.render("redirectToClient");
+		}
 
+	}catch (e) {
+		console.log("create website fail", e)
+	}
+})
 
-app.get('/', (req, res) => res.json({ message: 'Server now is running.', status: HttpStatusCode.OK }))
+app.post('/thank-you', async (req, res) => {
+	const body = req.body;
+	try {
+
+		await createAdminServer(body);
+		return res.render("thankyou");
+
+	}catch (err){
+		console.log('err', err);
+		return  res.status(HttpStatusCode.BAD_REQUEST).json({
+			message: "Create user fail!"
+		})
+	}
+})
+
 export default app

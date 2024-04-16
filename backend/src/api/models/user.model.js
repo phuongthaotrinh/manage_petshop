@@ -39,12 +39,6 @@ const customerSchema = new mongoose.Schema({
     images:{
         type: Array
     },
-    role: {
-        type: String,
-        trim: true,
-        enum: Object.values(customersRole),
-        default:customersRole.CUSTOMERS
-    },
     bio:{
         type: String,
         require: false
@@ -66,7 +60,14 @@ const customerSchema = new mongoose.Schema({
     employmentStatus:{
         type: Boolean,
         default: false
-    }
+    },
+    roles:[
+        {
+           type:  mongoose.Types.ObjectId,
+            ref:"Roles"
+        }
+    ]
+
 },{
     timestamps: true,
     versionKey: false,

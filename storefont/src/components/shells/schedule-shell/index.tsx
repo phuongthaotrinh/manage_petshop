@@ -10,31 +10,10 @@ import {
 import {useGetScheduleList} from "@/actions/queries/schedule";
 
 import {DataTableColumnHeader} from "@/components/common/data-table/components/column-header";
-import Link from "next/link";
 import {Badge} from "@/components/ui/badge";
-import {
-    AlertDialog, AlertDialogAction, AlertDialogCancel,
-    AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
-} from "@/components/ui/alert-dialog";
-import {PencilRuler, Trash} from "lucide-react";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
-
+import {X} from "lucide-react"
 import {usePathname, useRouter} from "next/navigation";
-import {
-    ColumnDef,
-    ColumnFiltersState,
-    SortingState,
-    VisibilityState,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox";
@@ -43,7 +22,6 @@ import {useGetAllServices} from "@/actions/queries/services";
 
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuLabel,
@@ -51,15 +29,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {DotsHorizontalIcon} from "@radix-ui/react-icons";
+import {CancelAlert} from "@/components/cancel-alert";
 
 export function ScheduleShellTemplate() {
     const {data,isPending}  = useGetScheduleList();
     const {data:services, isPending: serviceStt} = useGetAllServices();
     const [selectedRowIds, setSelectedRowIds] = React.useState<number[]>([])
-
+    const [open, setOpen]= React.useState<boolean>(false)
     const pathname = usePathname();
     const route = useRouter();
-
+    console.log("schedule", data)
 
 
 
@@ -105,18 +84,6 @@ export function ScheduleShellTemplate() {
             },
 
             {
-                accessorKey: "customer_mail",
-                header: ({column}) => (
-                    <DataTableColumnHeader column={column} title="Mail"/>
-                ),
-                cell: ({row}) => {
-                    const id = row.original._id;
-                    return (
-                        <> {row.getValue("customer_mail")}  </>
-                    )
-                },
-            },
-            {
                 accessorKey: "customer_phoneNumber",
                 header: ({column}) => (
                     <DataTableColumnHeader column={column} title="Phone"/>
@@ -144,8 +111,19 @@ export function ScheduleShellTemplate() {
                 filterFn: (row, id, value) => {
                     return value.includes(row.getValue(id))
                 },
-                header: "services",
-                enableHiding: true
+                header: "",
+                cell: () => <></>,
+                enableHiding: false,
+
+            },
+            {
+                id: "service_timer",
+                header: "time",
+                cell: ({row}) => {
+                    const data = `${row.original.dateString} ${row.original.timeString}`
+                    return <>{data ? data : ""}</>
+                },
+
             },
             {
                 accessorKey: "customer_id",
@@ -154,7 +132,7 @@ export function ScheduleShellTemplate() {
                 ),
                 cell: ({row}) => {
                     return (
-                        <Badge> {!row.original.customer_id ? "guest" : "customer"}</Badge>
+                        <Badge variant={!row.original.customer_id ? "default" : "orange"}> {!row.original.customer_id ? "guest" : "customer"}</Badge>
                     )
                 },
             },
@@ -168,11 +146,22 @@ export function ScheduleShellTemplate() {
                 cell: ({row}) =><> {row.original.status} </>
             },
 
+
             {
                 id: "actions",
                 cell: ({row}) => (
                     <div className="space-x-5">
+                            <Button variant="link" size="icon" onClick={() => setOpen(true)}>
+                                <X className="h-4 w-4" />
+                            </Button>
 
+                        {open &&
+                            <CancelAlert
+                                setOpen={setOpen}
+                                open={open}
+                                title="Reject"
+                                handleOk={() => console.log("reject")}
+                            />}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -218,10 +207,6 @@ export function ScheduleShellTemplate() {
                                     id: "customer_phoneNumber",
                                     title: "Customer phone"
                                 },
-                                {
-                                    id: "customer_mail",
-                                    title: "Customer email"
-                                }
                             ]}
                             filterableColumns={[
                                 {
@@ -236,121 +221,7 @@ export function ScheduleShellTemplate() {
                                         }):[]
                                 }
                             ]}
-
                         />
-                        {/*<div className="w-full">*/}
-                        {/*    <div className="flex items-center py-4">*/}
-                        {/*        <Input*/}
-                        {/*            placeholder="Filter emails..."*/}
-                        {/*            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}*/}
-                        {/*            onChange={(event) =>*/}
-                        {/*                table.getColumn("email")?.setFilterValue(event.target.value)*/}
-                        {/*            }*/}
-                        {/*            className="max-w-sm"*/}
-                        {/*        />*/}
-                        {/*        <DropdownMenu>*/}
-                        {/*            <DropdownMenuTrigger asChild>*/}
-                        {/*                <Button variant="outline" className="ml-auto">*/}
-                        {/*                    Columns <ChevronDownIcon className="ml-2 h-4 w-4" />*/}
-                        {/*                </Button>*/}
-                        {/*            </DropdownMenuTrigger>*/}
-                        {/*            <DropdownMenuContent align="end">*/}
-                        {/*                {table*/}
-                        {/*                    .getAllColumns()*/}
-                        {/*                    .filter((column) => column.getCanHide())*/}
-                        {/*                    .map((column) => {*/}
-                        {/*                        return (*/}
-                        {/*                            <DropdownMenuCheckboxItem*/}
-                        {/*                                key={column.id}*/}
-                        {/*                                className="capitalize"*/}
-                        {/*                                checked={column.getIsVisible()}*/}
-                        {/*                                onCheckedChange={(value) =>*/}
-                        {/*                                    column.toggleVisibility(!!value)*/}
-                        {/*                                }*/}
-                        {/*                            >*/}
-                        {/*                                {column.id}*/}
-                        {/*                            </DropdownMenuCheckboxItem>*/}
-                        {/*                        )*/}
-                        {/*                    })}*/}
-                        {/*            </DropdownMenuContent>*/}
-                        {/*        </DropdownMenu>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="rounded-md border">*/}
-                        {/*        <Table>*/}
-                        {/*            <TableHeader>*/}
-                        {/*                {table.getHeaderGroups().map((headerGroup) => (*/}
-                        {/*                    <TableRow key={headerGroup.id}>*/}
-                        {/*                        {headerGroup.headers.map((header) => {*/}
-                        {/*                            return (*/}
-                        {/*                                <TableHead key={header.id}>*/}
-                        {/*                                    {header.isPlaceholder*/}
-                        {/*                                        ? null*/}
-                        {/*                                        : flexRender(*/}
-                        {/*                                            header.column.columnDef.header,*/}
-                        {/*                                            header.getContext()*/}
-                        {/*                                        )}*/}
-                        {/*                                </TableHead>*/}
-                        {/*                            )*/}
-                        {/*                        })}*/}
-                        {/*                    </TableRow>*/}
-                        {/*                ))}*/}
-                        {/*            </TableHeader>*/}
-                        {/*            <TableBody>*/}
-                        {/*                {table.getRowModel().rows?.length ? (*/}
-                        {/*                    table.getRowModel().rows.map((row) => (*/}
-                        {/*                        <TableRow*/}
-                        {/*                            key={row.id}*/}
-                        {/*                            data-state={row.getIsSelected() && "selected"}*/}
-                        {/*                        >*/}
-                        {/*                            {row.getVisibleCells().map((cell) => (*/}
-                        {/*                                <TableCell key={cell.id}>*/}
-                        {/*                                    {flexRender(*/}
-                        {/*                                        cell.column.columnDef.cell,*/}
-                        {/*                                        cell.getContext()*/}
-                        {/*                                    )}*/}
-                        {/*                                </TableCell>*/}
-                        {/*                            ))}*/}
-                        {/*                        </TableRow>*/}
-                        {/*                    ))*/}
-                        {/*                ) : (*/}
-                        {/*                    <TableRow>*/}
-                        {/*                        <TableCell*/}
-                        {/*                            colSpan={columns.length}*/}
-                        {/*                            className="h-24 text-center"*/}
-                        {/*                        >*/}
-                        {/*                            No results.*/}
-                        {/*                        </TableCell>*/}
-                        {/*                    </TableRow>*/}
-                        {/*                )}*/}
-                        {/*            </TableBody>*/}
-                        {/*        </Table>*/}
-                        {/*    </div>*/}
-                        {/*    <div className="flex items-center justify-end space-x-2 py-4">*/}
-                        {/*        <div className="flex-1 text-sm text-muted-foreground">*/}
-                        {/*            {table.getFilteredSelectedRowModel().rows.length} of{" "}*/}
-                        {/*            {table.getFilteredRowModel().rows.length} row(s) selected.*/}
-                        {/*        </div>*/}
-                        {/*        <div className="space-x-2">*/}
-                        {/*            <Button*/}
-                        {/*                variant="outline"*/}
-                        {/*                size="sm"*/}
-                        {/*                onClick={() => table.previousPage()}*/}
-                        {/*                disabled={!table.getCanPreviousPage()}*/}
-                        {/*            >*/}
-                        {/*                Previous*/}
-                        {/*            </Button>*/}
-                        {/*            <Button*/}
-                        {/*                variant="outline"*/}
-                        {/*                size="sm"*/}
-                        {/*                onClick={() => table.nextPage()}*/}
-                        {/*                disabled={!table.getCanNextPage()}*/}
-                        {/*            >*/}
-                        {/*                Next*/}
-                        {/*            </Button>*/}
-                        {/*        </div>*/}
-                        {/*    </div>*/}
-                        {/*</div>*/}
-
                     </>
                 ):<>Loading...</>}
                 </div>

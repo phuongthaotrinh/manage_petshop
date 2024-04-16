@@ -6,7 +6,6 @@ import {DiscountDetailTemplate} from "@/components/admin/discount";
 export default function DetailVoucherPage() {
     return (
         <>
-            DetailVoucherPage
             <Shell variant="sidebar" as="div">
                 <PageHeader  separated>
                     <PageHeaderHeading size="sm">Detail Discount</PageHeaderHeading>

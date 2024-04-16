@@ -13,6 +13,7 @@ import PaymentRoute from "./payment";
 import AuthRoute from "./auth.route";
 import DiscountRoute from "./discount.route";
 import ScheduleServiceRoute from "./schedule_service.route";
+import RoleAndPer from "./role_and_per.route";
 const rootRouters = [
 	UserRouter,
 	NewsRouter,
@@ -27,7 +28,8 @@ const rootRouters = [
 	PaymentRoute,
 	AuthRoute,
 	DiscountRoute,
-	ScheduleServiceRoute
+	ScheduleServiceRoute,
+	RoleAndPer
 ]
 
 const router = express.Router();

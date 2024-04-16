@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import app from './app';
-import connectMongoDB from './database/mongodb'
+import connectMongoDB from './database/mongodb';
 
 
 const PORT = process.env.PORT || 3004
@@ -10,4 +10,4 @@ app.listen(PORT, () => {
 })
 
 // connectSocketIO(server);
-connectMongoDB()
+connectMongoDB();
