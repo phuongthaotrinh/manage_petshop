@@ -17,7 +17,8 @@ const nextConfig = {
         fetches: {
           fullUrl: true
         }
-      }
+      },
+
 }
 
 module.exports = nextConfig

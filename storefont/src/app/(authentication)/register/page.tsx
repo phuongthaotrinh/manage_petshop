@@ -9,9 +9,13 @@ import {useForm} from "react-hook-form";
 import {intialValue, IRegisterForm, signUpSchema} from "@/validations/auth-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {toast} from "react-hot-toast";
+import {useCreateCustomers } from "@/actions/queries/authentication"
+
+export default  function RegisterPage() {
+    const {} = useCreateCustomers();
 
 
-export default function Signin() {
+
 
     const form = useForm<IRegisterForm>({
         resolver: zodResolver(signUpSchema),
@@ -19,9 +23,19 @@ export default function Signin() {
     });
 
 
-    async function onSubmit(values: IRegisterForm) {
-        toast(JSON.stringify(values, undefined, 2))
-
+    function onSubmit(values: IRegisterForm) {
+        console.log("dssdd", values)
+        toast.promise((useCreateCustomers(values)),{
+            loading: "Loading...",
+            success:(data) => {
+                console.log("data", data);
+                return "ssucrss"
+            },
+            error:(data) => {
+                console.log("err", data);
+                return "errr"
+            },
+        })
     }
 
     return (

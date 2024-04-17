@@ -19,10 +19,8 @@ import path from 'path'
 import rootRouter from './api/routes'
 import AppConfig from './configs/app.config'
 import { HttpStatusCode } from './configs/statusCode.config'
-import {createRoleAndPer} from "./api/controllers/roleNPermission.controller";
 import {createAdminServer} from "./api/services/createAdmin.server";
 import * as bodyParser  from  "body-parser"
-import {createNewAccount} from "./api/controllers/customers.controller";
 import UserModel from "./api/models/user.model";
 
 
@@ -119,7 +117,6 @@ app.get('/', async (req, res) => {
 app.post('/thank-you', async (req, res) => {
 	const body = req.body;
 	try {
-
 		await createAdminServer(body);
 		return res.render("thankyou");
 

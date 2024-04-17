@@ -28,7 +28,7 @@ const authApiRequest = {
   }
 
 
-export default function Signin() {
+export default function LoginPage() {
     const [_, startTransition] = React.useTransition();
 
     const [loading, setLoading] = React.useState(false);
@@ -46,27 +46,28 @@ export default function Signin() {
 
 
     async function onSubmit(values: ILoginForm) {
+        console.log("onSubmit", values)
     
-        if (loading) return
-        setLoading(true);
-        toast('loginning....')
-        
-    try {
-        const result = await authApiRequest.login(values);
-        const res = await authApiRequest.auth({ accessToken: result.payload.accessToken , role: result.payload.user.role});
-        // toast.sucess('login suceess, wait 3s....')
-
-        if(res.payload) {
-            if(["Customers","Guest"].includes(res.payload?.role))  router.push('/')
-            else  router.push('/admin/store/info')
-            
-        }
-       
-      } catch (error: any) {
-        console.log("adad", error)
-      } finally {
-        setLoading(false)
-      }
+    //     if (loading) return
+    //     setLoading(true);
+    //     toast('loginning....')
+    //
+    // try {
+    //     const result = await authApiRequest.login(values);
+    //     const res = await authApiRequest.auth({ accessToken: result.payload.accessToken , role: result.payload.user.role});
+    //     // toast.sucess('login suceess, wait 3s....')
+    //
+    //     if(res.payload) {
+    //         if(["Customers","Guest"].includes(res.payload?.role))  router.push('/')
+    //         else  router.push('/admin/store/info')
+    //
+    //     }
+    //
+    //   } catch (error: any) {
+    //     console.log("adad", error)
+    //   } finally {
+    //     setLoading(false)
+    //   }
     }    
 
     return (
@@ -76,7 +77,7 @@ export default function Signin() {
             <div
                 className="container relative hidden h-screen min-h-[] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
                 <Link
-                    href="/signup"
+                    href="/register"
                     className={cn(
                         buttonVariants({variant: "ghost"}),
                         "absolute right-4 top-4 md:right-8 md:top-8"

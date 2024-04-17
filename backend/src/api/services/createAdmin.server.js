@@ -20,29 +20,50 @@ export const createAdminServer = async (payload) => {
                status: true
            });
 
-           const newRole = await RolesModel.create({
-               name: "Super Admin",
-               value: slugify("Super Admin"),
-               permissions:[newPer._id]
+            await RolesModel.insertMany([
+               {
+                   name: "Super Admin",
+                   value: "super-admin",
+                   permissions:[newPer._id],
+                   isCanDelete:false
+               },
+               {
+                   name: "Employee",
+                   value: "employee",
+                   permissions:[],
+                   isCanDelete:false
+               },
+               {
+                   name: "Customers",
+                   value: "customers",
+                   permissions:[],
+                   isCanDelete:false
+               }
+           ]);
+           const role = await RolesModel.findOne({
+               value: "super-admin"
            });
             await UserModel.create({
                email: payload.email,
                password:payload.password,
                username:payload.username,
-               role: [newRole._id],
+               roles: [role._id],
                isVerified:true
            });
-            // await WeightsModel.insertMany(weights)
+           await WeightsModel.insertMany(weights)
             // await ServicesModel.insertMany(services)
        }
 
-       if(countPer === 1 && countRole ===1){
-           const role = await RolesModel.findOne();
+       if(countPer >= 1 && countRole >= 1 && customerCount === 0){
+           const role = await RolesModel.findOne({
+               value: "super-admin"
+           });
+           console.log("countPer", role)
            return await UserModel.create({
                email: payload.email,
                password:payload.password,
                username:payload.username,
-               role: [role._id],
+               roles: [role._id],
                isVerified:true
            });
 

@@ -7,21 +7,12 @@ import PetsModel from "../models/pets.model";
 
 
 export const createNewAccount = async (payload) => {
-		const existedTeacher = await CustomersModel.exists({
-			$or: [
-				{
+		const existedEmail = await CustomersModel.exists({
 					email: payload.email
-				},
-				{
-					phoneNumber: payload.phoneNumber
-				},
-				{
-					username: payload.username
-				}
-			]
 		})
-		if (existedTeacher) {
-			throw createHttpError.BadRequest(`User email, phone number or username cannot be duplicated!`)
+
+		if (existedEmail) {
+			throw createHttpError.BadRequest(`User email  cannot be duplicated!`)
 		}
 
 		return await new CustomersModel({ ...payload }).save()

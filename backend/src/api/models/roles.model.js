@@ -10,7 +10,12 @@ const RolesSchema = new mongoose.Schema({
             type: mongoose.Types.ObjectId,
             ref:"Permissions"
         }
-    ]
+    ],
+    isCanDelete:{
+        type:Boolean,
+        default: true
+    }
+
 
 }, {
     collection: 'roles',

@@ -63,8 +63,7 @@ const customerSchema = new mongoose.Schema({
     },
     roles:[
         {
-           type:  mongoose.Types.ObjectId,
-            ref:"Roles"
+           type: mongoose.Types.ObjectId, ref:"Roles"
         }
     ]
 
