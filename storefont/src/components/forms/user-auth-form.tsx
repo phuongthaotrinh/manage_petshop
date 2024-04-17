@@ -14,6 +14,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import {Input} from "@/components/ui/input";
+import { ReloadIcon } from "@radix-ui/react-icons"
 
 
 interface UserAuthFormProps {
@@ -77,7 +78,7 @@ export function UserAuthForm({mode,form,onSubmit, ...props}: UserAuthFormProps) 
                                         />
                                         <FormField
                                             control={form.control}
-                                            name="name"
+                                            name="username"
                                             render={({field}) => (
                                                 <FormItem>
                                                     <FormLabel>Username</FormLabel>
@@ -95,9 +96,9 @@ export function UserAuthForm({mode,form,onSubmit, ...props}: UserAuthFormProps) 
 
                             <Button disabled={isLoading} type="submit">
                                 {isLoading && (
-                                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+                                    <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                                 )}
-                                Sign In with Email
+                                Sign In
                             </Button>
                         </div>
                     </form>
@@ -120,17 +121,17 @@ export function UserAuthForm({mode,form,onSubmit, ...props}: UserAuthFormProps) 
                 <div className="grid space-y-1">
                     <Button variant="outline" type="button" disabled={isLoading}>
                         {isLoading ? (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+                            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
-                            <Icons.googleColor className="mr-2 h-4 w-4"/>
+                            <ReloadIcon className="mr-2 h-4 w-4" />
                         )}{" "}
                         GitHub
                     </Button>
                     <Button variant="outline" type="button" disabled={isLoading} className="m-0">
                         {isLoading ? (
-                            <Icons.spinner className="mr-2 h-4 w-4 animate-spin"/>
+                            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                         ) : (
-                            <Icons.facebookSolid className="mr-2 h-4 w-4"/>
+                            <ReloadIcon className="mr-2 h-4 w-4" />
                         )}{" "}
                         Facebook
                     </Button>
