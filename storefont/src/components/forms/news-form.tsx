@@ -61,7 +61,7 @@ export function NewsForm ({form,onSubmit,tags,setTags,content,setContent,reset,i
                                             }}
 
                                         >
-                                            {isPending && <Icons.spinner/>}Delete
+                                            {isPending && <Icons.google className="w-4 h-4 mr-2"/>}Delete
                                         </Button>
                                     )}
                                     <Button
@@ -69,7 +69,7 @@ export function NewsForm ({form,onSubmit,tags,setTags,content,setContent,reset,i
                                         className="shad-button_primary whitespace-nowrap"
                                         disabled={isPending}
                                     >
-                                        {isPending && <Icons.spinner/>}Submit
+                                        {isPending && <Icons.google/>}Submit
                                     </Button>
                                     <Button
                                         type="button"
@@ -77,7 +77,7 @@ export function NewsForm ({form,onSubmit,tags,setTags,content,setContent,reset,i
                                         disabled={isPending}
                                         onClick={() => reset()}
                                     >
-                                        {isPending && <Icons.spinner/>}Reset
+                                        {isPending && <Icons.google/>}Reset
                                     </Button>
 
                                 </div>

@@ -1,8 +1,11 @@
 import * as z from "zod";
-import {toast} from "react-hot-toast";
-import axios, {AxiosError} from "axios";
-import {UseFormReturn} from "react-hook-form";
-import {CategoryItem} from "@/types/products"
+import { toast } from "react-hot-toast";
+import axios, { AxiosError } from "axios";
+import { UseFormReturn } from "react-hook-form";
+import { CategoryItem } from "@/types/products";
+
+
+
 export function formatDate(date: Date | string | number) {
     if (date) {
         return new Intl.DateTimeFormat("vi-VN", {
@@ -30,7 +33,7 @@ export function catchError(err: unknown) {
     } else if (err instanceof AxiosError) {
         console.log("err", err)
         if (err.response) {
-            const message = err.response.data.error || err.response.data.message ;
+            const message = err.response.data.error || err.response.data.message;
             return toast.error(message)
         } else {
             let message = err.message
@@ -55,7 +58,7 @@ export function formatPrice(
     } = {}
 ) {
     const { currency = "VND", notation = "standard" } = options
-     if(price == "undefined") return
+    if (price == "undefined") return
     return new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency,
@@ -91,13 +94,12 @@ export function formatBytes(
     const accurateSizes = ["Bytes", "KiB", "MiB", "GiB", "TiB"]
     if (bytes === 0) return "0 Byte"
     const i = Math.floor(Math.log(bytes) / Math.log(1024))
-    return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${
-        sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
-    }`
+    return `${(bytes / Math.pow(1024, i)).toFixed(decimals)} ${sizeType === "accurate" ? accurateSizes[i] ?? "Bytest" : sizes[i] ?? "Bytes"
+        }`
 }
 
 
-export const setValuesOfForm = (data:any, form:UseFormReturn<any>) => {
+export const setValuesOfForm = (data: any, form: UseFormReturn<any>) => {
     Object.keys(data).forEach(key => {
         form.setValue(key, data[key]);
     });
@@ -108,7 +110,7 @@ export function truncate(str: string, length: number) {
 }
 
 
-export function generateUniqueId () {
+export function generateUniqueId() {
     const numberR = Math.floor(Math.random() * 100).toString();
     const now = Date.now()
 
@@ -118,7 +120,7 @@ export function generateUniqueId () {
 
 
 ///CART
-const FREE_SHIP_MONEY=800000
+const FREE_SHIP_MONEY = 800000
 
 
 
@@ -133,7 +135,7 @@ export const calcShippingFee = (userPrice: number) => {
 }
 
 
-export function findParentAndCheckChildren(data: CategoryItem[] | null, idToFind: string | null): { parents: CategoryItem[],parentNames:string, hasChildren: boolean } {
+export function findParentAndCheckChildren(data: CategoryItem[] | null, idToFind: string | null): { parents: CategoryItem[], parentNames: string, hasChildren: boolean } {
     if (!data || !Array.isArray(data) || data.length === 0 || !idToFind) {
         return { parents: [], hasChildren: false, parentNames: '' };
     }
@@ -161,3 +163,48 @@ export function findParentAndCheckChildren(data: CategoryItem[] | null, idToFind
     findParentHelper(data);
     return { parents, hasChildren, parentNames: parentNames.join(' / ') };
 }
+interface PermissionItem {
+    _id: string;
+    name: string;
+    status?: boolean;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+}
+
+interface GroupedData {
+    [key: string]: PermissionItem[];
+}
+
+interface ResponseItem {
+    [key: string]: PermissionItem[];
+}
+
+export function groupByPermissions(data: PermissionItem[]): ResponseItem[] {
+    const response: ResponseItem[] = [];
+    const groupedData: GroupedData = {};
+    if(!data) return [] as  ResponseItem[] 
+    data.forEach((item) => {
+        const permissionName = item.name.split('.')[1];
+        const newName = item.name.split('.')[2]
+        if (!groupedData[permissionName]) {
+            groupedData[permissionName] = [];
+        }
+
+        // Thêm trường convert_name vào mỗi phần tử
+        const newItem = { ...item, perName: newName };
+        groupedData[permissionName].push(newItem);
+    });
+
+    for (const key in groupedData) {
+        const permissionArray = groupedData[key];
+        const permissionObject: ResponseItem = {
+            [key]: permissionArray
+        };
+        response.push(permissionObject);
+    }
+
+    return response;
+}
+
+      

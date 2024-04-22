@@ -14,7 +14,6 @@ export function Providers(props: { children: React.ReactNode }) {
                         refetchOnMount:false,
                         refetchOnReconnect: false,
                         staleTime:3000,
-                        refetchInterval:4000,
                     },
                 },
             }),
