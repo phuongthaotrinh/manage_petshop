@@ -1,41 +1,126 @@
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 import * as React from "react";
-import { Checkbox } from "@/components/ui/checkbox"
-import { ReloadIcon } from "@radix-ui/react-icons";
-import { Skeleton } from "@/components/ui/skeleton"
-import { groupByPermissions } from "@/lib/helpers";
+import {Checkbox} from "@/components/ui/checkbox"
+import {ReloadIcon} from "@radix-ui/react-icons";
+import {groupByPermissions} from "@/lib/helpers";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow
+} from "@/components/ui/table"
+import {CheckedState} from "@radix-ui/react-menu";
 
+type CheckboxAll = "indeterminate" | true | false;
 
+export function RolesForm({form, onSubmit, permissions, status, createRoleStt}: any) {
+    const convertPermissions = groupByPermissions(permissions?.data);
+    const methods = permissions?.methods;
+    const countMethodValue = permissions?.countDataOfMethods
 
-export function RolesForm({ form, onSubmit, permissions, status, createRoleStt, selectAll, setSelectAll}: any) {
-    const convertPermissions = groupByPermissions(permissions);
     const [isIndeterminate, setIsIndeterminate] = React.useState<boolean>(false);
+    const [selectAll, setSelectAll] = React.useState<CheckboxAll>(false)
+    const [chooseMethod, setChooseMethod] = React.useState<any[]>([]);
+    const [checkAllDataOfMethod, setCheckAllDataOfMethod] = React.useState(false)
+    const [singleCheck, setSingleCheck] = React.useState<any[]>([])
+
+
     const memoFormPermission = React.useMemo(() => {
-        return form.watch("permissions")?.length
+        return form.watch("permissions")
     }, [form.watch("permissions")])
 
+    const indeterminateValue = React.useMemo(() => {
+        return memoFormPermission?.length > 0 && memoFormPermission?.length !== permissions?.data?.length;
+    }, [memoFormPermission, permissions]);
+
+    const selectAllValue = React.useMemo(() => {
+        return memoFormPermission?.length === permissions?.data?.length;
+    }, [memoFormPermission, permissions]);
+
+    const singleCheckvalue = React.useMemo(() => {
+        return (name: string) => {
+            let status: CheckboxAll = false;
+            // @ts-ignore
+            const result = Object.groupBy(singleCheck, ({permissions}) => permissions);
+            const transformedB: any = {};
+            for (const key in result) {
+                if (Object.hasOwnProperty.call(result, key)) {
+                    transformedB[key] = result[key].length;
+                }
+            }
+
+            if(transformedB?.[name] === undefined){
+                if(chooseMethod?.includes(name) || selectAll){
+                    status = true
+                }else{
+                    status = false
+                }
+            }else{
+                if(transformedB?.[name] === countMethodValue?.[name]){
+                    status = true
+                }
+                else if(transformedB?.[name] < countMethodValue?.[name]){
+                    status = "indeterminate"
+                }else{
+                    status = false
+                }
+            }
+            return status;
+        };
+    }, [singleCheck, selectAll, chooseMethod]);
+
+
     React.useEffect(() => {
-        if (memoFormPermission === 0) {
-            setIsIndeterminate(false);
-        } else if (memoFormPermission === permissions.length) {
-            setIsIndeterminate(false);
-            setSelectAll(true);
-        } else {
-            setIsIndeterminate(true);
-            setSelectAll(false);
-        }
-    }, [memoFormPermission, selectAll]);
+        setIsIndeterminate(indeterminateValue);
+        setSelectAll(selectAllValue);
+    }, [memoFormPermission?.length, selectAll]);
+
+
     const handleSelectAll = () => {
         if (!selectAll) {
-            const allPermissionIds = permissions &&  permissions?.map((permission: any) => permission._id);
-            form.setValue("permissions",allPermissionIds);
+            const allPermissionIds = permissions && permissions?.data?.map((permission: any) => permission._id);
+            form.setValue("permissions", allPermissionIds);
         } else {
             form.setValue("permissions", []);
         }
         setSelectAll(!selectAll);
     };
+
+    React.useEffect(() => {
+        let data2: (string | null)[] = [];
+        chooseMethod && chooseMethod?.map((i, j) => {
+            const elements = document.querySelectorAll(
+                `button[data-pername="${i}"]`
+            );
+            elements.forEach((e) => {
+                const elId = e.getAttribute("data-id");
+                data2.push(elId);
+            });
+
+        });
+        form.setValue("permissions", data2);
+    }, [chooseMethod])
+
+
+    const handleCheckSingle = (status: CheckedState, item: any) => {
+        const {_id, pername} = item
+        const existItem = singleCheck.find((i) => i?.value === _id);
+        if (!existItem && status) {
+            const newData = {
+                value: _id,
+                permissions: pername,
+            }
+            setSingleCheck([...singleCheck, newData])
+        } else {
+            const filterData = singleCheck.filter((i) => i.value !== _id);
+            setSingleCheck(filterData)
+        }
+    }
+
     return (
         <>
             <Form {...form}  >
@@ -43,13 +128,13 @@ export function RolesForm({ form, onSubmit, permissions, status, createRoleStt, 
                     <FormField
                         control={form.control}
                         name="name"
-                        render={({ field }) => (
+                        render={({field}) => (
                             <FormItem>
                                 <FormLabel>Name</FormLabel>
                                 <FormControl>
                                     <Input placeholder="name" {...field} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage/>
                             </FormItem>
                         )}
                     />
@@ -66,126 +151,132 @@ export function RolesForm({ form, onSubmit, permissions, status, createRoleStt, 
                             name="permissions"
                             render={() => (
                                 <FormItem>
-                                    <div className="mb-4">
-                                        <FormLabel className="text-base">Permissions</FormLabel>
-                                        <FormDescription>
-                                            Select the permissions you want to display in the role.
-                                        </FormDescription>
-                                    </div>
+                                    <div
+                                        className="flex items-center  space-x-2  ">
+                                        <Checkbox
+                                            checked={selectAll || (isIndeterminate ? "indeterminate" : false)}
+                                            onCheckedChange={handleSelectAll}
+                                            id="select-all"
 
-
-                                    
-                                    <Checkbox
-                                    checked={selectAll || (isIndeterminate ? "indeterminate" : false)}
-                                    // onCheckedChange={() => {
-                                    //     setSelectAll(!selectAll);
-                                    // }}
-                                    onCheckedChange={handleSelectAll}
-
-                                />
-
-
-
-
-
-                                    {convertPermissions && convertPermissions?.map((i: any, j: any) => {
-                                        const name = Object.keys(i) as any
-                                        return (
-                                            <div key={j} className="grid grid-cols-6  gap-3 items-center ">
-                                                <b className="">{name}</b>
-                                                <div className="col-span-5 flex items-center gap-3">{(i?.[name] as any[]) && i[name]?.map((item: any, jj: any) => {
-                                                    return (
-                                                        <div className="flex items-center" key={jj}>
-                                                            <FormField
-                                                                key={item._id}
-                                                                control={form.control}
-                                                                name="permissions"
-                                                                render={({ field }) => {
-                                                                    // @ts-ignore
-                                                                    return (
-                                                                        <FormItem
-                                                                            key={item._id}
-                                                                            className="flex flex-row items-start space-x-3 space-y-0"
-                                                                        >
-                                                                            <FormControl>
-                                                                                <Checkbox
-                                                                                    //@ts-ignore
-                                                                                    checked={field.value?.includes(item._id)}
-                                                                                    onCheckedChange={(checked) => {
-                                                                                        return checked
-                                                                                            ? field.onChange([...field.value, item._id])
-                                                                                            : field.onChange(
-                                                                                                field.value?.filter(
-                                                                                                    (value: any) => value !== item._id
-                                                                                                )
-                                                                                            )
-                                                                                    }}
-                                                                                />
-                                                                            </FormControl>
-                                                                            <FormLabel className="font-normal">
-                                                                                {item.perName}
-                                                                            </FormLabel>
-                                                                        </FormItem>
-                                                                    )
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    )
-                                                })}</div>
-
-                                            </div>
-                                        )
-                                    })}
-                                    {/* {permissions.map((item:{_id:string, name:string}) => (
-                                        <FormField
-                                            key={item._id}
-                                            control={form.control}
-                                            name="permissions"
-                                            render={({ field }) => {
-                                                // @ts-ignore
-                                                return (
-                                                    <FormItem
-                                                        key={item._id}
-                                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                                    >
-                                                        <FormControl>
-                                                            <Checkbox
-                                                                //@ts-ignore
-                                                                checked={field.value?.includes(item._id)}
-                                                                onCheckedChange={(checked) => {
-                                                                    return checked
-                                                                        ? field.onChange([...field.value, item._id])
-                                                                        : field.onChange(
-                                                                            field.value?.filter(
-                                                                                (value:any) => value !== item._id
-                                                                            )
-                                                                        )
-                                                                }}
-                                                            />
-                                                        </FormControl>
-                                                        <FormLabel className="font-normal">
-                                                            {item.name}
-                                                        </FormLabel>
-                                                    </FormItem>
-                                                )
-                                            }}
                                         />
-                                    ))} */}
+                                        <label
+                                            htmlFor="select-all"
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        >
+                                            Select All
+                                        </label>
+                                    </div>
+                                    <Table
+                                        className="table w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                        <TableHeader
+                                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 ">
+                                            <TableRow className=" ">
+                                                <TableHead></TableHead>
+                                                {methods && methods?.map((i: any, j: any) => {
+                                                    // @ts-ignore
+                                                    const statusForSpecificName = singleCheckvalue(i) as any  ;
+
+                                                    return (
+                                                        <TableHead className="" key={j}>
+                                                            <div className="grid gap-y-1.5">
+                                                                {i}
+                                                                <Checkbox
+                                                                    id={i}
+                                                                    checked={statusForSpecificName}
+                                                                    onCheckedChange={(e) => {
+                                                                        const existMethod = chooseMethod.find((m) => m === i);
+                                                                        if (!existMethod) {
+                                                                            setChooseMethod([...chooseMethod, i]);
+                                                                        } else {
+                                                                            const newArr = chooseMethod.filter((m) => m !== i);
+                                                                            setChooseMethod(newArr);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            </div>
+
+                                                        </TableHead>
+                                                    )
+                                                })}
+                                            </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                            {convertPermissions && convertPermissions?.map((i, j) => {
+                                                const name = Object.keys(i) as any;
+                                                return (
+                                                    <TableRow key={`${j}.${name}`}>
+                                                        <TableCell className="font-bold">{name}</TableCell>
+                                                        {name && i[name]?.map((o: any, jj) => {
+                                                            return (
+                                                                <React.Fragment key={`${jj}.${o?._id}.${o?.name}.${j}`}>
+                                                                    {o !== null ? (
+                                                                        <TableCell key={`${jj}.${o?._id}.${o?.name}`}>
+                                                                            <FormField
+                                                                                key={o._id}
+                                                                                control={form.control}
+                                                                                name="permissions"
+                                                                                render={({field}) => {
+                                                                                    // @ts-ignore
+                                                                                    return (
+                                                                                        <FormItem
+                                                                                            key={o._id}
+                                                                                            className="flex flex-row items-start space-x-2 space-y-0 w-28 max-w-28  overflow-ellipsis truncate  "
+                                                                                        >
+                                                                                            <FormControl>
+                                                                                                <Checkbox
+                                                                                                    //@ts-ignoreP
+                                                                                                    data-id={o._id}
+                                                                                                    data-pername={o.pername}
+                                                                                                    data-name={o.name}
+                                                                                                    checked={field.value?.includes(o._id)}
+                                                                                                    onCheckedChange={(checked) => {
+                                                                                                        handleCheckSingle(checked, o);
+
+                                                                                                        return checked
+                                                                                                            ? field.onChange([...field.value, o._id])
+                                                                                                            : field.onChange(
+                                                                                                                field.value?.filter(
+                                                                                                                    (value: any) => value !== o._id
+                                                                                                                )
+                                                                                                            )
+                                                                                                    }}
+                                                                                                />
+                                                                                            </FormControl>
+
+                                                                                        </FormItem>
+                                                                                    )
+                                                                                }}
+                                                                            />
+                                                                        </TableCell>
+                                                                    ) : (
+                                                                        <>
+                                                                            <td key={jj} className="p-2">
+                                                                                <Checkbox disabled={true}/>
+                                                                            </td>
+                                                                        </>
+                                                                    )}
+                                                                </React.Fragment>
+                                                            )
+                                                        })}
 
 
-                                    <FormMessage />
+                                                    </TableRow>
+                                                )
+
+
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                     ) : null}
 
 
-
-
-                    <Button type="submit"
-                        disabled={createRoleStt === "pending" || status === "pending"}>
-                        {createRoleStt === "pending" ? <>  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> Please wait</> : "Submit"}
-
+                    <Button type="submit" disabled={createRoleStt === "pending" || status === "pending"}>
+                        {createRoleStt === "pending" ? <>  <ReloadIcon className="mr-2 h-4 w-4 animate-spin"/> Please
+                            wait</> : "Submit"}
                     </Button>
                 </form>
             </Form>

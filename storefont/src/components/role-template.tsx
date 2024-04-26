@@ -9,15 +9,11 @@ import { formRoleCreateInit, formRoleValid, formRoleValidType } from "@/validati
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-type CheckboxAll = "true" | "false" | "indeterminate"
-
-
 export function RoleDetailTemplate({ id }: { id: any }) {
     const { data: permissions, status } = useGetListPermissions();
     const { mutateAsync, status: createRoleStt } = useCreateRole();
     const [_, startTransition] = React.useTransition()
-    const [selectAll, setSelectAll] = React.useState<CheckboxAll>("indeterminate")
-    
+
     const [mode, setMode] = React.useState<string>("");
     const params = useParams()
     React.useEffect(() => {
@@ -56,8 +52,6 @@ export function RoleDetailTemplate({ id }: { id: any }) {
             permissions={permissions} 
             status={status} 
             createRoleStt={createRoleStt}
-            selectAll={selectAll}
-            setSelectAll={setSelectAll}
 
 
         />

@@ -183,23 +183,42 @@ interface ResponseItem {
 export function groupByPermissions(data: PermissionItem[]): ResponseItem[] {
     const response: ResponseItem[] = [];
     const groupedData: GroupedData = {};
-    if(!data) return [] as  ResponseItem[] 
+    if (!data) return [];
+
     data.forEach((item) => {
         const permissionName = item.name.split('.')[1];
-        const newName = item.name.split('.')[2]
-        if (!groupedData[permissionName]) {
-            groupedData[permissionName] = [];
-        }
-
-        // Thêm trường convert_name vào mỗi phần tử
-        const newItem = { ...item, perName: newName };
-        groupedData[permissionName].push(newItem);
+        const perName = item.name.split('.')[2];
+        if (!groupedData[permissionName]) {// @ts-ignore
+            groupedData[permissionName] = new Set<string>();
+        }// @ts-ignore
+        groupedData[permissionName].add(perName);
     });
 
-    for (const key in groupedData) {
-        const permissionArray = groupedData[key];
+    const allPerNames = new Set<string>();
+    for (const permissionName in groupedData) {
+        for (const perName of groupedData[permissionName]) {
+            // @ts-ignore
+            allPerNames.add(perName);
+        }
+    }
+
+    const sortedPerNames = Array.from(allPerNames);
+
+    for (const permissionName in groupedData) {
+        const permissionArray: (string | null)[] = [];
+        for (const perName of sortedPerNames) {// @ts-ignore
+            permissionArray.push(groupedData[permissionName].has(perName) ? perName : null);
+        }
+        const permissionItemArray = permissionArray.map((perName) => {
+            const foundItem = data.find((item) => item.name.split('.')[1] === permissionName && item.name.split('.')[2] === perName);
+            const newItem = {...foundItem, indentity:permissionName}
+            return foundItem ? newItem : null;
+        });// @ts-ignore
+        // @ts-ignore
         const permissionObject: ResponseItem = {
-            [key]: permissionArray
+            // @ts-ignore
+            [permissionName]: permissionItemArray ,
+
         };
         response.push(permissionObject);
     }
@@ -207,4 +226,3 @@ export function groupByPermissions(data: PermissionItem[]): ResponseItem[] {
     return response;
 }
 
-      

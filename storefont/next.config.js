@@ -18,6 +18,7 @@ const nextConfig = {
           fullUrl: true
         }
       },
+    reactStrictMode:false
 
 }
 

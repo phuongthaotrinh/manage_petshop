@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 
 const PermissionsSchema = new mongoose.Schema({
     name: {type: String},
-    status:{type:Boolean}
+    status:{type:Boolean},
+    pername: {type: String}
 
 }, {
     collection: 'permissions',
